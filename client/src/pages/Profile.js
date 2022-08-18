@@ -2,6 +2,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import {Link} from "react-router-dom";
 import Avatar from 'react-avatar';
+import Logo from '../images/logo5.PNG'
 
 function Profile() {
     return (
@@ -13,7 +14,7 @@ function Profile() {
                     <h1>Product-List with everything you are Selling</h1>
                 </div>
                     <div className=' w-52 h-52 ml-10'>
-                        <Avatar name='foo bar' className='rounded-full scale-150 ml-7 mt-8'/>
+                        <Avatar src={Logo} className='rounded-full scale-150 ml-7 mt-8'/>
                         <div className='static flex flex-col mt-32 ml-10'>
                             <div className='p-6'>Name</div>
                             <div className='p-6'>Email</div>
