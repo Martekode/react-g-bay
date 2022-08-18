@@ -14,7 +14,7 @@ function Profile() {
                 </div>
                     <div className=' w-52 h-52 ml-10'>
                         <Avatar name='foo bar' className='rounded-full scale-150 ml-7 mt-8'/>
-                        <div className='static flex flex-col mt-40 ml-10'>
+                        <div className='static flex flex-col mt-32 ml-10'>
                             <div className='p-6'>Name</div>
                             <div className='p-6'>Email</div>
                          <Link to="/sell"><div className='p-6'>Sell products</div></Link>
