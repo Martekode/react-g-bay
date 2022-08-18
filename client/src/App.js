@@ -5,7 +5,7 @@ import './App.css';
 import Profile from "./pages/Profile";
 import Checkout from "./pages/Checkout";
 import Home from "./pages/Home";
-
+import Sellpage from "./pages/Sellpage";
 
 
 function App() {
@@ -19,6 +19,9 @@ function App() {
         </Routes>
         <Routes>
             <Route path="/checkout" element={<Checkout />} />
+        </Routes>
+        <Routes>
+            <Route path="/sell" element={<Sellpage />} />
         </Routes>
     </div>
   );
