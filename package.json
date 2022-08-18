@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Martekode/react-g-bay#readme",
   "devDependencies": {
+    "nodemon": "^2.0.19",
     "parcel": "^2.0.0-rc.0"
   },
   "dependencies": {
