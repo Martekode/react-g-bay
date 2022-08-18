@@ -1,6 +1,6 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-
+import {Link} from "react-router-dom";
 
 function Profile() {
     return (
@@ -15,7 +15,7 @@ function Profile() {
                         <div className='static flex flex-col mt-60 ml-10'>
                             <div className='p-6'>Name</div>
                             <div className='p-6'>Email</div>
-                            <div className='p-6'>BlaBla</div>
+                         <Link to="/sell"><div className='p-6'>Sell products</div></Link>
                         </div>
                     </div>
                 <div className='absolute left-1/2 border-2 w-fit h-52 mt-12' >
