@@ -22,10 +22,10 @@ const Navbar = () => {
                 </div>
                 <ul className='flex'>
                     <li className='flex flex-row'>
-                        <Link className='p-4' to='/'><IoHomeSharp/></Link>
+                        <button className='border-2 rounded-full w-32'>Log in / Register</button>
                         <Link className='p-4' to='/profile'><CgProfile/></Link>
+                        <Link className='p-4' to='/'><IoHomeSharp/></Link>
                         <Link className="p-4" to='/checkout'><FaShoppingCart/></Link>
-
                     </li>
 
                 </ul>
