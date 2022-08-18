@@ -11,7 +11,5 @@ uploadRouter.get('/', (_request, response) => {
     const example = new Example('I am an example object')
     response.send('Example object says:' + example.getName())
 })
-
-
 //Make this router accessible to JavaScript Modules
 export default uploadRouter;
