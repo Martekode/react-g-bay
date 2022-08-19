@@ -24,7 +24,10 @@
     "parcel": "^2.0.0-rc.0"
   },
   "dependencies": {
-    "dotenv": "^16.0.1",
+MM_frontend_features
+    "@types/react": "^18.0.17",
+
+    "dotenv": "^16.0.1", main
     "express": "^4.18.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

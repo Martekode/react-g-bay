@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Pizzadoos",
+    "description": "pizza hawai",
+    "price": 35
+  },
+  {
+    "id": 1,
+    "name": "Bladsalaad",
+    "description": "rucola sla",
+    "price": 2
+  },
+  {
+    "id": 3,
+    "name": "Wortel Puree",
+    "description": "blabla",
+    "price": 30
+  }
+]
