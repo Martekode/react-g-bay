@@ -1,6 +1,5 @@
 import React, {useState} from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+
 
 function Checkout() {
     const [totalPrice, setTotalPrice] = useState(0)
@@ -26,7 +25,7 @@ function Checkout() {
             priceArray[i] = (product.price * product.amount)
             console.log(priceArray);
         })
-        setTotalPrice(priceArray.reduce((a, v) => a = a + v, 0))
+        setTotalPrice(priceArray.reduce((a, v) => a + v, 0))
         console.log(totalPrice);
     }
 
@@ -39,14 +38,14 @@ function Checkout() {
                         return (
                             <li key={i} className='border-2 w-[45rem] h-28 m-1'>name: {product.name} <br/>
                                 price: {product.price}<br/>
-                                <input type='number' min='0' id={i} defaultValue={product.amount} className='w-12 h-8'
+                                <input type='number' min='0' id={i} defaultValue={product.amount} className='w-12 h-8 bg-background'
                                        onChange={handleAmount}/>
                             </li>
 
                         );
                     })}
                 </ul>
-                <p>Total price : {totalPrice? totalPrice : setTotalPrice(priceArray.reduce((a, v) => a = a + v, 0))}</p>
+                <p>Total price : {totalPrice ? totalPrice : setTotalPrice(priceArray.reduce((a, v) => a + v, 0)) }</p>
             </div>
         </div>
     )
