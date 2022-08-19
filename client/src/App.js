@@ -6,9 +6,13 @@ import Profile from "./pages/Profile";
 import Checkout from "./pages/Checkout";
 import Home from "./pages/Home";
 import Sellpage from "./pages/Sellpage";
-
+import axios from "axios";
 
 function App() {
+
+    axios.get('product.json')
+        .then(res => console.log(res.data))
+
   return (
     <div>
         <Routes>
@@ -34,6 +38,6 @@ function App() {
 
     return <h1 className="text-3xl font-bold underline">{data.message}</h1>;
 
-}
 
+}
 export default App;
