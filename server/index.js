@@ -1,13 +1,41 @@
-const express = require('express'),
-    path    = require('path'),
-    route   = require('./route.js'),
-    app     = express(),
-    port    = process.env.PORT || 8080;
+//Import > Require
+import dotenv from 'dotenv'
+dotenv.config()
 
-app.use(express.static(path.resolve(__dirname, '../client/build')));
-
-route(app);
-
-app.listen(port);
-
-console.log(`API server is listening on port:${port}`);
+//Get everything form express, name it express
+import express from "express";
+/*
+This URL.fileURLToPath function decodes the file URL to a path string
+and ensures that the URL control characters (/, %) are correctly appended/adjusted
+when converting the given file URL into a path.
+*/
+//URL is a NodeJS Module to get filenames from a path in a correct manner
+import { fileURLToPath } from "url";
+//Path is a magic solution from node to resolve path stuff
+import path from "path";
+//TODO::Why are we using __filename ? - And not path to get this name >? 
+//Get the name of this file??
+const __filename = fileURLToPath(import.meta.url);
+//IMPORT ROUTERS HERE
+import exampleRouter from './api/routers/exampleRouter.js'
+//Use file name to resolve the path to this file ? 
+//The path.dirname() method returns the directory name of a path, 
+//similar to the Unix dirname command. Trailing directory separators are ignored
+//TODO:: Why are we using __dirname ? 
+const __dirname = path.dirname(__filename);
+//Create express app
+const app = express();
+//MAKE APP USE ROUTERS HERE
+app.use('/api/example', exampleRouter)
+//TODO::How does this work ?
+//any get request not handled above will return the index.html in ../client/build
+app.get('/root', (_req, res) => {
+    res.send(DB_CONF)
+})
+app.get('*', (_req, res) => {
+    res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+});
+//Define server port - take PORT from .env or use fallback:5000
+const PORT = process.env.PORT || 5000;
+app.listen(PORT);
+console.log(`API server is listening on port:${PORT}`);
