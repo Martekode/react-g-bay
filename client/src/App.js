@@ -7,6 +7,8 @@ import Checkout from "./pages/Checkout";
 import Home from "./pages/Home";
 import Sellpage from "./pages/Sellpage";
 import axios from "axios";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 function App() {
 
@@ -15,6 +17,7 @@ function App() {
 
   return (
     <div>
+        <Navbar/>
         <Routes>
             <Route path="/" element={<Home />} />
         </Routes>
@@ -27,6 +30,7 @@ function App() {
         <Routes>
             <Route path="/sell" element={<Sellpage />} />
         </Routes>
+        <Footer/>
     </div>
   );
 
