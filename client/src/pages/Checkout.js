@@ -26,13 +26,12 @@ function Checkout() {
             priceArray[i] = (product.price * product.amount)
             console.log(priceArray);
         })
-        setTotalPrice(priceArray.reduce((a, v) => a+ v, 0))
+        setTotalPrice(priceArray.reduce((a, v) => a = a + v, 0))
         console.log(totalPrice);
     }
 
     return (
         <div>
-            <Navbar/>
             <div className='flex flex-col items-center'>
                 <ul>
                     {productArray.map((product, i) => {
@@ -47,9 +46,8 @@ function Checkout() {
                         );
                     })}
                 </ul>
-                <p>Total price : {totalPrice? totalPrice : setTotalPrice(priceArray.reduce((a, v) => a+ v, 0))}</p>
+                <p>Total price : {totalPrice? totalPrice : setTotalPrice(priceArray.reduce((a, v) => a = a + v, 0))}</p>
             </div>
-            <Footer/>
         </div>
     )
 }
