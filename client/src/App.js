@@ -10,6 +10,8 @@ import axios from "axios";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
+
+
 function App() {
 
     axios.get('product.json')
