@@ -30,7 +30,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 //MAKE APP USE ROUTERS HERE
 app.use('/api/example', exampleRouter)
-app.use('/api/product', productRouter)
+app.use('/api/product', productRouter) // todo fix this + understand
 app.use('/api/user', userRouter)
 
 
