@@ -6,7 +6,6 @@ const router = express.Router();
 const product = require("../models/Product");
 //Get Helpers
 const errorHandler = require("../helpers/errorHandler");
-const { response } = require("express");
 //BASE PATH - DEV INDICATOR
 //We use this to make sure our router works :D
 router.get("/", (request, response) => {
@@ -131,13 +130,11 @@ router.delete("/delete/:id", async (request, response) => {
     if (!result.affectedRows) {
       throw new Error("BadId");
     }
-    response
-      .status(200)
-      .json({
-        "Deleted product:": productToDeleteFormatted,
-        "Use following method to decode the deleted object:":
-          "JSON.parse(object)",
-      });
+    response.status(200).json({
+      "Deleted product:": productToDeleteFormatted,
+      "Use following method to decode the deleted object:":
+        "JSON.parse(object)",
+    });
   } catch (error) {
     const handledError = errorHandler.handleProductError(error);
     response.status(handledError.status).json(handledError.message);

@@ -12,7 +12,7 @@ class ErrorHandler {
       }
       case "undefined": {
         return this.createConsumerError(
-          "One or more parameters were undefined/missing",
+          "One or more parameters were undefined or missing",
           error
         );
       }
@@ -25,6 +25,12 @@ class ErrorHandler {
       case "NoDelete": {
         return this.createConsumerError(
           "No Product was deleted from the database.",
+          error
+        );
+      }
+      case "BadUser": {
+        return this.createConsumerError(
+          "No User that matches that user ID has been found in our database",
           error
         );
       }
