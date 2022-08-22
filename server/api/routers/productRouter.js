@@ -8,7 +8,7 @@ const product = require("../models/Product");
 const errorHandler = require("../helpers/errorHandler");
 //BASE PATH - DEV INDICATOR
 //We use this to make sure our router works :D
-router.get("/", (request, response) => {
+router.get("/", (_request, response) => {
   response.send("Product Router Reached");
 });
 /*
@@ -19,7 +19,7 @@ router.get("/", (request, response) => {
  Here we define all getters
 */
 //GET ALL PRODUCTS
-router.get("/all", async (request, response) => {
+router.get("/all", async (_request, response) => {
   try {
     const result = await product.getAllProducts();
     response.status(200).json(result);
@@ -35,7 +35,10 @@ router.get("/id/:id", async (request, response) => {
       throw new Error("NaN");
     }
     const result = await product.getProductById(request.params.id);
-    response.status(200).json(result);
+    if (!result.length) {
+      throw new Error("BadId");
+    }
+    response.status(200).json(result[0]);
   } catch (error) {
     const handledError = errorHandler.handleProductError(error);
     response.status(handledError.status).json(handledError.message);
@@ -68,7 +71,7 @@ router.get("/category/:category", async (request, response) => {
   }
 });
 //GET ALL CATEGORIES
-router.get("/categories", async (request, response) => {
+router.get("/categories", async (_request, response) => {
   try {
     const result = await product.getAllCategories();
     response.status(200).json(result);
@@ -99,7 +102,12 @@ router.post("/new", async (request, response) => {
       imageUrl,
       category
     );
-    response.status(200).json({ newProductID: result.insertId.toString() });
+    const RawInsertedProductID = result.insertId.toString();
+    const insertedProduct = await product.getProductById(RawInsertedProductID);
+    response.status(200).json({
+      AddedProductId: RawInsertedProductID,
+      AddedProduct: insertedProduct[0],
+    });
   } catch (error) {
     const handledError = errorHandler.handleProductError(error);
     response.status(handledError.status).json(handledError.message);
@@ -119,7 +127,6 @@ router.delete("/delete/:id", async (request, response) => {
   //INSERT CODE HERE
   try {
     const productToDelete = await product.getProductById(request.params.id);
-    const productToDeleteFormatted = JSON.stringify(productToDelete);
     if (isNaN(request.params.id)) {
       throw new Error("NaN");
     }
@@ -131,9 +138,7 @@ router.delete("/delete/:id", async (request, response) => {
       throw new Error("BadId");
     }
     response.status(200).json({
-      "Deleted product:": productToDeleteFormatted,
-      "Use following method to decode the deleted object:":
-        "JSON.parse(object)",
+      "Deleted product:": productToDelete[0],
     });
   } catch (error) {
     const handledError = errorHandler.handleProductError(error);

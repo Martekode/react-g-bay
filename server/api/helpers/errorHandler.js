@@ -38,6 +38,18 @@ class ErrorHandler {
         return this.createServerError(error);
     }
   }
+  handleUserError(error) {
+    switch (error.message) {
+      case "NaN": {
+        return this.createConsumerError("NaN - Expected A Number!", error);
+      }
+      case "BadId": {
+        return this.createConsumerError("No User was found by this Id", error);
+      }
+      default:
+        return this.createServerError(error);
+    }
+  }
   createConsumerError(message, error) {
     return {
       status: 400,

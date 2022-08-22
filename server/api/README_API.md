@@ -106,23 +106,43 @@ Example of a valid and accepted body at this endpoint:
     "category":"Examples"
 }
 ```
-**KNOWN ERRORS- W.I.P**:
-    - Currently Any Category will be accepted, since the set of useable categories has not been defined yet.
-    - Currently specifying the ID of a non existant used will return a server error - since the user endpoint is still in development
-**!IMPORTANT!**
-Extra: This request's response will always provide you with the ID of the newly added product.
-You will receive a json body in following format:
+**EXTRA**
+- The API will respond with a json object containing:
+    - The Added product's ID
+    - The total Added product as it is stored in the database
+Example:
 ```json
 {
-    "newProductID": "35"
+    "Added product id:": "47",
+    "Added product: ": {
+        "id": 47,
+        "owner_id": 1,
+        "name": "tesdddsdftio",
+        "price": "586",
+        "description": "OverffffRated",
+        "image_url": "https://assets.pokemon.com/assets/cms2/img/lalaland.png",
+        "category": "APItest"
+    }
 }
 ```
+**KNOWN ERRORS- W.I.P**
+- Currently Any Category will be accepted, since the set of useable categories has not been defined yet.
+- Currently specifying the ID of a non existant used will return a server error - since the user endpoint is still in development
+
+~~**!IMPORTANT!**~~
+~~Extra: This request's response will always provide you with the ID of the newly added product.~~
+
 ### DELETE
+
+Deleting a product from the database
 #### Delete a product by ID
 Currently the API only supports deleting products by ID.
+
 ```js
 /api/delete/:id
 ```
-On success this endpoint will respond with a JSON stringified version of the deleted object. You can use JSON.parse(string) on the string to restructure the JSON object on receival. This product is permanently deleted from the database and can not be restored!
+On success the API will return the deleted product to you in JSON format. The product will no longer be available in the database. This action can not be reversed.
+
+~~On success this endpoint will respond with a JSON stringified version of the deleted object. You can use JSON.parse(string) on the string to restructure the JSON object on receival. This product is permanently deleted from the database and can not be restored!~~
 ***
 **Happy Coding!**
