@@ -49,6 +49,20 @@ Here we define all Post methods
       category,
     ]);
   }
+  /*
+ _(`-')    (`-')  _         (`-')  _(`-')      (`-')  _ 
+( (OO ).-> ( OO).-/  <-.    ( OO).-/( OO).->   ( OO).-/ 
+ \    .'_ (,------.,--. )  (,------./    '._  (,------. 
+ '`'-..__) |  .---'|  (`-') |  .---'|'--...__) |  .---' 
+ |  |  ' |(|  '--. |  |OO )(|  '--. `--.  .--'(|  '--.  
+ |  |  / : |  .--'(|  '__ | |  .--'    |  |    |  .--'  
+ |  '-'  / |  `---.|     |' |  `---.   |  |    |  `---. 
+ `------'  `------'`-----'  `------'   `--'    `------'
+ */
+  async deleteProductById(id) {
+    const query = "DELETE FROM product_table WHERE id = ?";
+    return this.pool.query(query, [id]);
+  }
 }
 const product = new Product();
 module.exports = product;

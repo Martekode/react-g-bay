@@ -25,7 +25,7 @@ router.get("/all", async (request, response) => {
     const result = await product.getAllProducts();
     response.status(200).json(result);
   } catch (error) {
-    const handledError = errorHandler.handleProductGetError(error);
+    const handledError = errorHandler.handleProductError(error);
     response.status(handledError.status).json(handledError.message);
   }
 });
@@ -38,7 +38,7 @@ router.get("/id/:id", async (request, response) => {
     const result = await product.getProductById(request.params.id);
     response.status(200).json(result);
   } catch (error) {
-    const handledError = errorHandler.handleProductGetError(error);
+    const handledError = errorHandler.handleProductError(error);
     response.status(handledError.status).json(handledError.message);
   }
 });
@@ -51,7 +51,7 @@ router.get("/name/:name", async (request, response) => {
     }
     response.status(200).json(result);
   } catch (error) {
-    const handledError = errorHandler.handleProductGetError(error);
+    const handledError = errorHandler.handleProductError(error);
     response.status(handledError.status).json(handledError.message);
   }
 });
@@ -64,7 +64,7 @@ router.get("/category/:category", async (request, response) => {
     }
     response.status(200).json(result);
   } catch (error) {
-    const handledError = errorHandler.handleProductGetError(error);
+    const handledError = errorHandler.handleProductError(error);
     response.status(handledError.status).json(handledError.message);
   }
 });
@@ -102,7 +102,7 @@ router.post("/new", async (request, response) => {
     );
     response.status(200).json({ newProductID: result.insertId.toString() });
   } catch (error) {
-    const handledError = errorHandler.handleProductPostError(error);
+    const handledError = errorHandler.handleProductError(error);
     response.status(handledError.status).json(handledError.message);
   }
 });
@@ -116,7 +116,33 @@ router.post("/new", async (request, response) => {
  |  '-'  / |  `---.|     |' |  `---.   |  |    |  `---. 
  `------'  `------'`-----'  `------'   `--'    `------'
  */
-router.delete("/delete/:id", async (request, response) => {});
+router.delete("/delete/:id", async (request, response) => {
+  //INSERT CODE HERE
+  try {
+    const productToDelete = await product.getProductById(request.params.id);
+    const productToDeleteFormatted = JSON.stringify(productToDelete);
+    if (isNaN(request.params.id)) {
+      throw new Error("NaN");
+    }
+    if (!productToDelete) {
+      throw new Error("BadId");
+    }
+    const result = await product.deleteProductById(request.params.id);
+    if (!result.affectedRows) {
+      throw new Error("BadId");
+    }
+    response
+      .status(200)
+      .json({
+        "Deleted product:": productToDeleteFormatted,
+        "Use following method to decode the deleted object:":
+          "JSON.parse(object)",
+      });
+  } catch (error) {
+    const handledError = errorHandler.handleProductError(error);
+    response.status(handledError.status).json(handledError.message);
+  }
+});
 module.exports = router;
 
 //!!!ADD MODEL TO HANDLE ERROR -> Takes error code -> Returns error message :: Does not interfer with HTTP
