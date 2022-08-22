@@ -8,5 +8,7 @@ client/node_modules
 #IDES
 .vscode
 .idea
-#??
+#OS
+.DS_STORE
+#REACT ? 
 client/build
