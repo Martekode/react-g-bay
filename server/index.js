@@ -1,13 +1,24 @@
-const express = require('express'),
-    path    = require('path'),
-    route   = require('./route.js'),
-    app     = express(),
-    port    = process.env.PORT || 8080;
+const express = require("express");
+const path = require("path");
+const dotenv = require("dotenv");
 
-app.use(express.static(path.resolve(__dirname, '../client/build')));
+dotenv.config();
+const app = express();
+const PORT = process.env.PORT || 3001;
 
-route(app);
+//Middleware
+app.use(express.json());
+//ROUTER IMPORTS
+const userRouter = require("./api/routers/userRouter");
 
-app.listen(port);
+//ROUTERS
+app.use("/user", userRouter);
 
-console.log(`API server is listening on port:${port}`);
+// Any uncaught returns index.html
+app.get("*", (request, response) => {
+  response.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+});
+
+app.listen(PORT, () => {
+  console.log(`Server listening on ${PORT}`);
+});

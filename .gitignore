@@ -1,7 +1,12 @@
+#NodeJS
 node_modules
 client/node_modules
-.vscode
+#Parcel Bundler
 .parcel-cache
-
-client/build
+#Security
+.env
+#IDES
+.vscode
 .idea
+#??
+client/build
