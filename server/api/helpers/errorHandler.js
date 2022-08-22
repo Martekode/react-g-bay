@@ -1,5 +1,5 @@
 class ErrorHandler {
-  handleProductGetError(error) {
+  handleProductError(error) {
     switch (error.message) {
       case "NaN": {
         return this.createConsumerError("NaN - Expected A Number!", error);
@@ -10,15 +10,21 @@ class ErrorHandler {
           error
         );
       }
-      default:
-        return this.createServerError(error);
-    }
-  }
-  handleProductPostError(error) {
-    switch (error.message) {
       case "undefined": {
         return this.createConsumerError(
           "One or more parameters were undefined/missing",
+          error
+        );
+      }
+      case "BadId": {
+        return this.createConsumerError(
+          "No Product was found by this Id",
+          error
+        );
+      }
+      case "NoDelete": {
+        return this.createConsumerError(
+          "No Product was deleted from the database.",
           error
         );
       }
@@ -32,7 +38,8 @@ class ErrorHandler {
       message: {
         Error: true,
         "Message from DevTeam: ": message,
-        "Error Message:": error.toString(),
+        "Error Message:": error.message,
+        "Error:": error.toString(),
       },
     };
   }
