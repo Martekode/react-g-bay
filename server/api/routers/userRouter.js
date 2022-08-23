@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const errorHandler = require("../helpers/errorHandler");
 const user = require("../models/user");
-const encryptor = require("../helpers/encryption");
 const { request, response } = require("express");
 //BASE PATH - DEV INDICATOR
 router.get("/", (request, response) => {
