@@ -53,6 +53,19 @@ Here we define all Post methods
       "INSERT INTO user_table (name,password,email,image_url) VALUES(?,?,?,?)";
     return this.pool.query(query, [name, secret, email, imageUrl]);
   }
+  /*
+ _     ____  ____  ____  _____  _____
+/ \ /\/  __\/  _ \/  _ \/__ __\/  __/
+| | |||  \/|| | \|| / \|  / \  |  \  
+| \_/||  __/| |_/|| |-||  | |  |  /_ 
+\____/\_/   \____/\_/ \|  \_/  \____\
+     
+*/
+  async updateUserName(id, newname) {
+    const query = "UPDATE user_table SET name = ? WHERE id = ?";
+    return this.pool.query(query, [newname, id]);
+  }
+  //HELPERS
   createRandomName() {
     let result = "";
     const nameLength = 8;
@@ -73,10 +86,5 @@ Here we define all Post methods
   }
 }
 
-/* 
-
-Email as ID
-
-*/
 const user = new User();
 module.exports = user;

@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const errorHandler = require("../helpers/errorHandler");
 const user = require("../models/user");
-const { request, response } = require("express");
 //BASE PATH - DEV INDICATOR
 router.get("/", (request, response) => {
   response.send("Hello From /user");
@@ -139,15 +138,34 @@ router.post("/new", async (request, response) => {
     response.status(handledError.status).json(handledError.message);
   }
 });
-
 /*
- _(`-')    (`-')  _         (`-')  _(`-')      (`-')  _ 
-( (OO ).-> ( OO).-/  <-.    ( OO).-/( OO).->   ( OO).-/ 
- \    .'_ (,------.,--. )  (,------./    '._  (,------. 
- '`'-..__) |  .---'|  (`-') |  .---'|'--...__) |  .---' 
- |  |  ' |(|  '--. |  |OO )(|  '--. `--.  .--'(|  '--.  
- |  |  / : |  .--'(|  '__ | |  .--'    |  |    |  .--'  
- |  '-'  / |  `---.|     |' |  `---.   |  |    |  `---. 
- `------'  `------'`-----'  `------'   `--'    `------'
- */
+ _     ____  ____  ____  _____  _____
+/ \ /\/  __\/  _ \/  _ \/__ __\/  __/
+| | |||  \/|| | \|| / \|  / \  |  \  
+| \_/||  __/| |_/|| |-||  | |  |  /_ 
+\____/\_/   \____/\_/ \|  \_/  \____\
+                                     
+*/
+router.put("/update/name", async (request, response) => {
+  try {
+    const { userid, newname } = request.body;
+    if (!(userid && newname)) {
+      throw new Error("undefined");
+    }
+    const checkValidID = await user.getUserByID(userid);
+    if (!checkValidID.length) {
+      throw new Error("BadId");
+    }
+    const checkForName = await user.getUserByName(newname);
+    if (checkForName.length) {
+      throw new Error("nameAlreadyInDB");
+    }
+    await user.updateUserName(userid, newname);
+    const updatedUser = await user.getUserByID(userid);
+    response.status(200).json(updatedUser[0]);
+  } catch (error) {
+    const handledError = errorHandler.handleUserError(error);
+    response.status(handledError.status).json(handledError.message);
+  }
+});
 module.exports = router;
