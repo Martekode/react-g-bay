@@ -89,17 +89,17 @@ Here we define all Post methods
 */
 router.post("/new", async (request, response) => {
   try {
-    const { ownerId, name, price, description, imageUrl, category } =
+    const { owner_id, name, price, description, image_url, category } =
       request.body;
-    if (!(ownerId && name && price && description && imageUrl && category)) {
+    if (!(owner_id && name && price && description && image_url && category)) {
       throw new Error("undefined");
     }
     const result = await product.addNewProduct(
-      ownerId,
+      owner_id,
       name,
       price,
       description,
-      imageUrl,
+      image_url,
       category
     );
     const RawInsertedProductID = result.insertId.toString();

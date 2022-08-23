@@ -34,6 +34,18 @@ class ErrorHandler {
           error
         );
       }
+      case "BadEmail": {
+        return this.createConsumerError(
+          "No User found that matches that email adress in the database!",
+          error
+        );
+      }
+      case "TooManyUsers": {
+        return this.createConsumerError(
+          "Too many Users were found in the database with these credentials!",
+          error
+        );
+      }
       default:
         return this.createServerError(error);
     }

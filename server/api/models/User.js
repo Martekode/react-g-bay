@@ -14,6 +14,10 @@ class User {
     const query = "SELECT name,email,image_url FROM user_table WHERE ID = ?";
     return this.pool.query(query, id);
   }
+  async getUserByEmail(email) {
+    const query = "SELECT * FROM user_table WHERE email = ?";
+    return this.pool.query(query, email);
+  }
   /*
  ___  _  __  ___ 
 | o \/ \/ _||_ _|
@@ -22,5 +26,11 @@ class User {
 Here we define all Post methods
 */
 }
+
+/* 
+
+Email as ID
+
+*/
 const user = new User();
 module.exports = user;

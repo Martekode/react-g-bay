@@ -2,9 +2,11 @@ const express = require("express");
 const router = express.Router();
 const errorHandler = require("../helpers/errorHandler");
 const user = require("../models/user");
+const encryptor = require("../helpers/encryption");
 //BASE PATH - DEV INDICATOR
 router.get("/", (request, response) => {
-  response.send("USER ROUTE REACHED");
+  const test = encryptor.encrypt("Hello", "Secret");
+  response.json(test);
 });
 /*
   __  ___  ___ 
@@ -23,6 +25,22 @@ router.get("/id/:id", async (request, response) => {
       throw new Error("BadId");
     }
     response.status(200).json(result[0]);
+  } catch (error) {
+    const handledError = errorHandler.handleUserError(error);
+    response.status(handledError.status).json(handledError.message);
+  }
+});
+//GET USER BY EMAIL
+router.get("/email/:email", async (request, response) => {
+  try {
+    const result = await user.getUserByEmail(request.params.email);
+    if (!result.length) {
+      throw new Error("BadEmail");
+    }
+    if (result.length > 1) {
+      throw new Error("TooManyUsers");
+    }
+    response.status(200).json(result);
   } catch (error) {
     const handledError = errorHandler.handleUserError(error);
     response.status(handledError.status).json(handledError.message);
