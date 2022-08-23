@@ -98,12 +98,12 @@ The request will only be accepted if it contains a body with:
 Example of a valid and accepted body at this endpoint:
 ```json
 {
-    "ownerId":"4",
-    "name":"exampleProduct",
-    "price":"5.5",
-    "description":"This is an exampleproduct, Look! The price can be a decimal",
-    "imageUrl":"https://www.example.io/image.webp",
-    "category":"Examples"
+    "owner_id":"4",
+    "name":"Michael's Childhood Toy Collection",
+    "price":"90",
+    "description":"Epic toys bruf",
+    "image_url":"myimage.webp",
+    "category":"Toys"
 }
 ```
 **EXTRA**
