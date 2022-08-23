@@ -76,7 +76,7 @@ router.get("/categories", async (_request, response) => {
     const result = await product.getAllCategories();
     response.status(200).json(result);
   } catch (error) {
-    const handledError = errorHandler(error);
+    const handledError = errorHandler.handleProductError(error);
     response.status(handledError.status).json(handledError.message);
   }
 });
