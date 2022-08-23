@@ -1,11 +1,12 @@
 import React from 'react';
 import useFetch from './useFetch'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
 import Profile from "./pages/Profile";
 import Checkout from "./pages/Checkout";
 import Home from "./pages/Home";
 import Sellpage from "./pages/Sellpage";
-import axios from "axios";
+// import axios from "axios";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ProductPage from "./pages/Product";
@@ -13,9 +14,9 @@ import Category from "./pages/Category";
 
 function App() {
 
-    axios.get('product.json')
-        .then(res => console.log(res.data))
-        .catch(err => console.log(err));
+    // axios.get('product.json')
+    //     .then(res => console.log(res.data))
+    //     .catch(err => console.log(err));
 
   return (
     <div>
