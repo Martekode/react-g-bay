@@ -1,5 +1,6 @@
 import {Link} from "react-router-dom";
 import Avatar from 'react-avatar';
+import NewProduct from "../components/NewProduct";
 
 function Profile() {
     return (
