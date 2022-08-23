@@ -133,16 +133,149 @@ Example:
 ~~Extra: This request's response will always provide you with the ID of the newly added product.~~
 
 ### DELETE
-
 Deleting a product from the database
 #### Delete a product by ID
 Currently the API only supports deleting products by ID.
 
 ```js
-/api/delete/:id
+/api/product/delete/:id
 ```
 On success the API will return the deleted product to you in JSON format. The product will no longer be available in the database. This action can not be reversed.
 
 ~~On success this endpoint will respond with a JSON stringified version of the deleted object. You can use JSON.parse(string) on the string to restructure the JSON object on receival. This product is permanently deleted from the database and can not be restored!~~
 ***
+## USERS
+### GET
+#### Get User by ID
+This getter allows you to retrieve a user object by the user's ID and will return a userobject with it's ID, name, Email, imag_url
+```js
+/api/user/id/:id
+```
+- Example response:
+```json
+{
+    "id": 11,
+    "name": "teffsffsft",
+    "email": "tesfstd@teffst.com",
+    "image_url": "ww.image.png"
+}
+```
+#### Get User by Email
+This getter allows you to retrieve a user object by the user's Email and will return a user object just like when retrieving it trough ID
+```js
+/api/user/email/:email
+```
+#### Get all usernames
+This getter will return an array with all usernames currently in the database(Adding the userID here is not hard. if it's usefull please do let us know!)
+```js
+/api/user/name/all
+```
+#### Get BOOLEAN - Does this username exist in the database ? 
+This getter returns true/false depending if the given username exists in the database
+```js
+/api/user/name/check/:name
+```
+#### Get BOOLEAN - Does this email exist in the database ? 
+This getter returns true/false depending if the given email exists in the database
+```js
+/api/user/email/check/:email
+```
+### POST
+#### Create a new User
+Here you can create a new user, this endpoint expects a body with a username,email and image_url. The image_url is optional!. 
+```
+/api/user/api/new
+```
+This endpoint returns the newly created user ID and the complete user object in the db
+- Example of expected body:
+```json
+{
+    "username":"Example",
+    "email":"example@email.com",
+    "image_url":"this.url.is.optional.png"
+}
+```
+- Also Valid:
+```json
+{
+    "username":"Example",
+    "email":"example@email.com",
+}
+```
+- Example of a response:
+```json
+{
+    "DbId:": "32",
+    "UserObject:": {
+        "id": 32,
+        "name": "Example",
+        "email": "example@email.com",
+        "image_url": "this.url.is.optional.png"
+    }
+}
+```
+- Note: EMAIL = Unique in our database. if with any method to create a new user an email already exists you will be greeted with an error. As usual the first value of this error will be the Error boolean, set to true for easier handling.
+- Example of Error:
+```json
+{
+    "Error": true,
+    "Message from DevTeam: ": "This Email already exists in the database",
+    "Error Message:": "mailAlreadyInDB",
+    "Error:": "Error: mailAlreadyInDB"
+}
+```
+
+#### Create a new user by just an email
+This endpoint accepts an email and creates a new user just based on the email. IF the email does not exist! The username will be a randomly generated string, the user's picture will be empty
+```js
+/api/user/newbyemail
+```
+This endpoint returns the newly created user ID and the complete user object in the db
+- Example of expected body:
+```json
+{
+    "email":"example@email.com"
+}
+```
+- Example of what you may receive when creating a user like this
+```json
+{
+    "DbId:": "33",
+    "UserObject:": {
+        "id": 33,
+        "name": "VVXIKEHP",
+        "email": "example@emfail.com",
+        "image_url": ""
+    }
+}
+```
+### PUT
+#### Update by ID
+This endpoint will allow you to change a user's name by providing the userid and the newname 
+```js
+/api/user/update/name
+```
+this endpoint returns the updated user object
+- Example of expected body:
+```json
+{
+    "userid":"5",
+    "newname":"Example"
+}
+```
+#### Update by Email
+This endpoiunt will allow you to change a user's name by proviiding the user's email and the new name
+```js
+/api/user/update/bymail/name
+```
+It wil return the updated user object to you
+- Example of expected body:
+```json
+{
+    "email":"example@email.com",
+    "newname":"Example"
+}
+```
+
+### DELETE
 **Happy Coding!**
