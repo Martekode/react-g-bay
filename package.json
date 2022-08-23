@@ -20,6 +20,7 @@
   "homepage": "https://github.com/Martekode/react-g-bay#readme",
   "devDependencies": {
     "parcel": "^2.0.0-rc.0"
+    
   },
   "dependencies": {
     "@types/react": "^18.0.17",
