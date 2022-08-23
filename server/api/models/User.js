@@ -25,6 +25,15 @@ class User {
 |_|  \_/|__/ |_|              
 Here we define all Post methods
 */
+  async createNewUser(username, email, image_url) {
+    const query =
+      "INSERT INTO user_table(username,password,email,image_url)VALUES(?,?,?)";
+
+    //Creating placeholder for password <> Auth done by Auth0 ?
+    return this.pool.query(query, username, secret);
+  }
+  encryptSecret(string, email) {}
+  decryptSecret(string, email) {}
 }
 
 /* 
