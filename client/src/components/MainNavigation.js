@@ -9,6 +9,7 @@ function MainNavigation() {
                         <Link className="test" to='/'>Home</Link>
                         <Link className="test" to='/profile'>Profile</Link>
                         <Link className="test" to='/checkout'>Checkout</Link>
+                        <Link className="test" to='/product'>Product</Link>
                     </li>
                 </ul>
             </nav>

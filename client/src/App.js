@@ -9,8 +9,8 @@ import Sellpage from "./pages/Sellpage";
 import axios from "axios";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-
-
+import ProductPage from "./pages/Product";
+import Category from "./pages/Category";
 
 function App() {
 
@@ -31,6 +31,12 @@ function App() {
         </Routes>
         <Routes>
             <Route path="/sell" element={<Sellpage />} />
+        </Routes>
+        <Routes>
+            <Route path="/product" element={<ProductPage />} />
+        </Routes>
+        <Routes>
+            <Route path="/category" element={<Category />} />
         </Routes>
         <Footer/>
     </div>

@@ -8,7 +8,7 @@ import logo from "../images/blacklogo.png"
 //We can use a logo to import to go to the HomePage and for the Profile and Checkout
 const Navbar = () => {
     return (
-        <div className='bg-primary flex justify-between items-center border border-solid p-4'>
+        <div className='bg-primary flex justify-between items-center p-4'>
             <Link to="/">
                 <img className='w-16 h-16'
                     src={logo}
