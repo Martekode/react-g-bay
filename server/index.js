@@ -7,6 +7,8 @@ const PORT = process.env.PORT || 3001;
 
 //Middleware
 app.use(express.json());
+//Use static files from ../client/build
+app.use(express.static(path.join(__dirname, "../client/build")));
 //ROUTER IMPORTS
 const userRouter = require("./api/routers/userRouter");
 const productRouter = require("./api/routers/productRouter");

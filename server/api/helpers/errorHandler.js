@@ -28,12 +28,6 @@ class ErrorHandler {
           error
         );
       }
-      case "BadUser": {
-        return this.createConsumerError(
-          "No User that matches that user ID has been found in our database",
-          error
-        );
-      }
       default:
         return this.createServerError(error);
     }
@@ -43,9 +37,46 @@ class ErrorHandler {
       case "NaN": {
         return this.createConsumerError("NaN - Expected A Number!", error);
       }
+      case "undefined": {
+        return this.createConsumerError(
+          "One or more required parameters were undefined or missing",
+          error
+        );
+      }
       case "BadId": {
         return this.createConsumerError("No User was found by this Id", error);
       }
+      case "BadUser": {
+        return this.createConsumerError(
+          "No User that matches that user ID has been found in our database",
+          error
+        );
+      }
+      case "BadEmail": {
+        return this.createConsumerError(
+          "No User found that matches that email adress in the database!",
+          error
+        );
+      }
+      case "TooManyUsers": {
+        return this.createConsumerError(
+          "Too many Users were found in the database with these credentials!",
+          error
+        );
+      }
+      case "nameAlreadyInDB": {
+        return this.createConsumerError(
+          "This username already exists in the database",
+          error
+        );
+      }
+      case "mailAlreadyInDB": {
+        return this.createConsumerError(
+          "This Email already exists in the database",
+          error
+        );
+      }
+
       default:
         return this.createServerError(error);
     }
