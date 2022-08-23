@@ -93,6 +93,23 @@ router.get("/email/check/:email", async (request, response) => {
 |_|  \_/|__/ |_|              
 Here we define all Post methods
 */
+router.post("/newbyemail", async (request, response) => {
+  try {
+    const { email } = request.body;
+    if (!email) {
+      throw new Error("undefined");
+    }
+    const result = await user.createNewUserEmailOnly(email);
+    const responseUser = await user.getUserByID(result.insertId.toString());
+    response.status(200).json({
+      "DbId:": result.insertId.toString(),
+      "UserObject:": responseUser[0],
+    });
+  } catch (error) {
+    const handledError = errorHandler.handleUserError(error);
+    response.status(handledError.status).json(handledError.message);
+  }
+});
 router.post("/new", async (request, response) => {
   try {
     const { username, email, image_url } = request.body;

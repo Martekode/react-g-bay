@@ -45,6 +45,32 @@ Here we define all Post methods
     //Creating placeholder for password <> Auth done by Auth0 ?
     return this.pool.query(query, [username, secret, email, image_url]);
   }
+  async createNewUserEmailOnly(email) {
+    const name = this.createRandomName();
+    const secret = this.createRandomPassword();
+    const imageUrl = "";
+    const query =
+      "INSERT INTO user_table (name,password,email,image_url) VALUES(?,?,?,?)";
+    return this.pool.query(query, [name, secret, email, imageUrl]);
+  }
+  createRandomName() {
+    let result = "";
+    const nameLength = 8;
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    for (let i = 0; i < nameLength; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
+  createRandomPassword() {
+    let result = "";
+    const nameLength = 8;
+    const chars = "abcdefghijklmnopqrstuvwxyz0123456789-";
+    for (let i = 0; i < nameLength; i++) {
+      result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+  }
 }
 
 /* 
