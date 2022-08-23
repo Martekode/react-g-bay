@@ -3,6 +3,7 @@ const router = express.Router();
 const errorHandler = require("../helpers/errorHandler");
 const user = require("../models/user");
 const encryptor = require("../helpers/encryption");
+const { request, response } = require("express");
 //BASE PATH - DEV INDICATOR
 router.get("/", (request, response) => {
   const test = encryptor.encrypt("Hello", "Secret");
@@ -53,6 +54,7 @@ router.get("/email/:email", async (request, response) => {
 |_|  \_/|__/ |_|              
 Here we define all Post methods
 */
+router.post("/new", async (request, response) => {});
 
 /*
  _(`-')    (`-')  _         (`-')  _(`-')      (`-')  _ 
