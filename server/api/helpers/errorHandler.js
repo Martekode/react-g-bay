@@ -28,6 +28,24 @@ class ErrorHandler {
           error
         );
       }
+      default:
+        return this.createServerError(error);
+    }
+  }
+  handleUserError(error) {
+    switch (error.message) {
+      case "NaN": {
+        return this.createConsumerError("NaN - Expected A Number!", error);
+      }
+      case "undefined": {
+        return this.createConsumerError(
+          "One or more required parameters were undefined or missing",
+          error
+        );
+      }
+      case "BadId": {
+        return this.createConsumerError("No User was found by this Id", error);
+      }
       case "BadUser": {
         return this.createConsumerError(
           "No User that matches that user ID has been found in our database",
@@ -46,18 +64,19 @@ class ErrorHandler {
           error
         );
       }
-      default:
-        return this.createServerError(error);
-    }
-  }
-  handleUserError(error) {
-    switch (error.message) {
-      case "NaN": {
-        return this.createConsumerError("NaN - Expected A Number!", error);
+      case "nameAlreadyInDB": {
+        return this.createConsumerError(
+          "This username already exists in the database",
+          error
+        );
       }
-      case "BadId": {
-        return this.createConsumerError("No User was found by this Id", error);
+      case "mailAlreadyInDB": {
+        return this.createConsumerError(
+          "This Email already exists in the database",
+          error
+        );
       }
+
       default:
         return this.createServerError(error);
     }
