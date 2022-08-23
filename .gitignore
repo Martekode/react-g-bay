@@ -1,8 +1,14 @@
+#NodeJS
 node_modules
 client/node_modules
-.vscode
+#Parcel Bundler
 .parcel-cache
-
-client/build
-.idea
+#Security
 .env
+#IDES
+.vscode
+.idea
+#OS
+.DS_STORE
+#REACT ? 
+client/build
