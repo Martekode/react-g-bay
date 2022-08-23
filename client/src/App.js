@@ -16,6 +16,7 @@ function App() {
 
     axios.get('product.json')
         .then(res => console.log(res.data))
+        .catch(err => console.log(err));
 
   return (
     <div>
