@@ -61,10 +61,18 @@ Here we define all Post methods
 \____/\_/   \____/\_/ \|  \_/  \____\
      
 */
+  //UPDATE BY ID
   async updateUserName(id, newname) {
     const query = "UPDATE user_table SET name = ? WHERE id = ?";
     return this.pool.query(query, [newname, id]);
   }
+
+  //ALL UPDATE BY EMAIL
+  async updateUserByMailName(email, newname) {
+    const query = "UPDATE user_table SET name = ? WHERE email = ?";
+    return this.pool.query(query, [newname, email]);
+  }
+
   //HELPERS
   createRandomName() {
     let result = "";
