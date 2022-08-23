@@ -1,6 +1,5 @@
 import {Link} from "react-router-dom";
 import Avatar from 'react-avatar';
-import Logo from '../images/logo5.PNG'
 
 function Profile() {
     return (

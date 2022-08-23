@@ -27,7 +27,6 @@ const Navbar = () => {
                         <Link className='p-4' to='/'><IoHomeSharp/></Link>
                         <Link className="p-4" to='/checkout'><FaShoppingCart/></Link>
                     </li>
-
                 </ul>
         </div>
 )

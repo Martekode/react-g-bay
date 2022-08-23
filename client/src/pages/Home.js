@@ -58,12 +58,6 @@ const Home =() => {
                     {/*          src="https://www.svgrepo.com/show/321977/card-exchange.svg"*/}
                     {/*          className="h-auto max-w-md mt-12 pr-4 mb-32" alt="test"></img>*/}
                     {/*</p>*/}
-                    
-
-
-
-
-
 
                     {/*<p className='border-2  h-48 w-52 mb-4'>2nd Category</p>*/}
                     {/*<p className='border-2  h-48 w-52 mb-4'>3th Category</p>*/}
