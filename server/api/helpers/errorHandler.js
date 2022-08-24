@@ -1,3 +1,5 @@
+const product = require("../models/Product");
+
 class ErrorHandler {
   handleProductError(error) {
     switch (error.message) {
@@ -27,6 +29,10 @@ class ErrorHandler {
           "No Product was deleted from the database.",
           error
         );
+      }
+      case "BadCategory": {
+        const allowedCategories = product.getAllowedCategories()
+        return this.createConsumerError(`Currently only predefined categories are allowed: ${allowedCategories}`, error)
       }
       default:
         return this.createServerError(error, "Undefined Error");

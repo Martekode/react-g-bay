@@ -1,7 +1,12 @@
 const pool = require("../helpers/database");
 class Product {
+  //Cards,Miniatures,Gaming,Anime,Boardgames,Comics,D&D,Other
+  allowedCategories = ['cards', 'miniatures', 'gaming', 'anime', 'boardgames', 'comics', 'dungeons and dragons', 'other']
   constructor() {
     this.pool = pool;
+  }
+  getAllowedCategories() {
+    return this.allowedCategories
   }
   /*
   __  ___  ___ 
@@ -49,6 +54,7 @@ Here we define all Post methods
       category,
     ]);
   }
+
   /*
  _(`-')    (`-')  _         (`-')  _(`-')      (`-')  _ 
 ( (OO ).-> ( OO).-/  <-.    ( OO).-/( OO).->   ( OO).-/ 

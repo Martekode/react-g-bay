@@ -94,13 +94,26 @@ router.post("/new", async (request, response) => {
     if (!(owner_id && name && price && description && image_url && category)) {
       throw new Error("undefined");
     }
+    const allowedCategories = await product.getAllowedCategories();
+    let validatedCategory = "";
+    let categoryValid = false;
+    allowedCategories.forEach(allowedCategory => {
+      if (categoryValid) return;
+      if (allowedCategory === category) {
+        categoryValid = true;
+        validatedCategory = category
+      }
+    })
+    if (!categoryValid) {
+      throw new Error("BadCategory")
+    }
     const result = await product.addNewProduct(
       owner_id,
       name,
       price,
       description,
       image_url,
-      category
+      validatedCategory
     );
     const RawInsertedProductID = result.insertId.toString();
     const insertedProduct = await product.getProductById(RawInsertedProductID);
