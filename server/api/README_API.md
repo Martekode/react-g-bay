@@ -95,6 +95,10 @@ The request will only be accepted if it contains a body with:
 ```json
 "ownerId","name","price","description","imageUrl","category"
 ```
+The category can only be one of following string values: On any other value the product wil not be added to the database and you will receive an error (this check is not case sensitive as any entered value will be transformed to a lower case string)
+```js
+['cards', 'miniatures', 'gaming', 'anime', 'boardgames', 'comics', 'dungeons and dragons', 'other']
+```
 Example of a valid and accepted body at this endpoint:
 ```json
 {
