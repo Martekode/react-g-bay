@@ -82,7 +82,7 @@ class ErrorHandler {
           error
         );
       }
-      //INTENRAL SERVER ERRORS - QUERY WENT WRONG
+      //INTERNAL SERVER ERRORS - QUERY WENT WRONG
       case "UpdateError": {
         return this.createServerError(
           error,

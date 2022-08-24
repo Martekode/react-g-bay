@@ -91,10 +91,22 @@ router.post("/new", async (request, response) => {
   try {
     const { owner_id, name, price, description, image_url, category } =
       request.body;
+
+    const user = {
+      name: 'Greet',
+      id: '23',
+      status: 'VOET KAPOT',
+      hoop: 'een bekke',
+      voet: 'Herstelbaar'
+    }
+    const { id, status, hoop } = user;
+
+
+
     if (!(owner_id && name && price && description && image_url && category)) {
       throw new Error("undefined");
     }
-    const allowedCategories = await product.getAllowedCategories();
+    const allowedCategories = product.getAllowedCategories();
     let validatedCategory = "";
     let categoryValid = false;
     allowedCategories.forEach(allowedCategory => {
