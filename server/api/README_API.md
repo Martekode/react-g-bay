@@ -86,8 +86,16 @@ Returns all categories currently available in the product database
 ```js
 /api/product/categories
 ```
+#### Get All Products By Owner Id
+````js
+/api/product/owner/id/:id
+````
+#### Get All Product Id's By Email
+````
+
+````
 ### POST
-Adding a new product can be done trough a POST request on the following endpoint
+Adding a new product can be done through a POST request on the following endpoint
 ```js
 /api/product/new
 ```
