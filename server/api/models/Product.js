@@ -83,16 +83,16 @@ Here we define all Post methods
   ) {
     const query =
       "INSERT INTO product_table(owner_id,name,price,description,image_url,category) VALUES((SELECT id FROM user_table WHERE email = ? ),?,?,?,?,?)";
-    return this.pool.query(query, [
-      email,
-      name,
-      price,
-      description,
-      imageUrl,
-      category,
-    ]);
+    return this.pool
+      .query(query, [email, name, price, description, imageUrl, category])
+      .catch((error) => {
+        if (error.text === `Column 'owner_id' cannot be null`) {
+          throw new Error("BadEmail");
+        } else {
+          throw new Error("server", { cause: error });
+        }
+      });
   }
-
   /*
  _(`-')    (`-')  _         (`-')  _(`-')      (`-')  _ 
 ( (OO ).-> ( OO).-/  <-.    ( OO).-/( OO).->   ( OO).-/ 

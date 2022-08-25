@@ -1,3 +1,4 @@
+const e = require("express");
 const product = require("../models/Product");
 
 class ErrorHandler {
@@ -40,6 +41,12 @@ class ErrorHandler {
       case "BadEmail": {
         return this.createConsumerError(
           "There is no user in the database with that email!",
+          error
+        );
+      }
+      case "server": {
+        return this.createServerError(
+          "Something went wrong on the server, We are sorry!",
           error
         );
       }
@@ -114,7 +121,27 @@ class ErrorHandler {
       },
     };
   }
-  createServerError(error, message) {
+  createServerError(message, error) {
+    if (error.cause) {
+      console.log("Cause");
+      console.table(error.cause);
+      return {
+        status: 500,
+        message: {
+          Error: true,
+          "Message from DevTeam: ":
+            "Please provide following information when creating a support ticket.",
+          "Error Message: ": error.message,
+          "Error: ": error.toString(),
+          "Custom Message From DevTeam:": message,
+          error_information_for_backend: {
+            Errorname: error.cause.name,
+            Errortext: error.cause.text,
+            Errorcode: error.cause.code,
+          },
+        },
+      };
+    }
     return {
       status: 500,
       message: {

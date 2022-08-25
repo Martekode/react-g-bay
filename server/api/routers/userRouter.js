@@ -137,6 +137,9 @@ router.post("/newbyemail", async (request, response) => {
       throw new Error("mailAlreadyInDB");
     }
     const result = await user.createNewUserEmailOnly(email);
+    if (!result) {
+      throw new Error("Banana");
+    }
     const responseUser = await user.getUserByID(result.insertId.toString());
     response.status(200).json({
       "DbId:": result.insertId.toString(),
