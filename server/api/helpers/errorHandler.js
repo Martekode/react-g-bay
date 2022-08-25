@@ -1,3 +1,5 @@
+const product = require("../models/Product");
+
 class ErrorHandler {
   handleProductError(error) {
     switch (error.message) {
@@ -28,8 +30,21 @@ class ErrorHandler {
           error
         );
       }
+      case "BadCategory": {
+        const allowedCategories = product.getAllowedCategories();
+        return this.createConsumerError(
+          `Currently only predefined categories are allowed: ${allowedCategories}`,
+          error
+        );
+      }
+      case "BadEmail": {
+        return this.createConsumerError(
+          "There is no user in the database with that email!",
+          error
+        );
+      }
       default:
-        return this.createServerError(error);
+        return this.createServerError(error, "Undefined Error");
     }
   }
   handleUserError(error) {
@@ -76,9 +91,16 @@ class ErrorHandler {
           error
         );
       }
+      //INTERNAL SERVER ERRORS - QUERY WENT WRONG
+      case "UpdateError": {
+        return this.createServerError(
+          error,
+          "There was an error updating the Data in the database"
+        );
+      }
 
       default:
-        return this.createServerError(error);
+        return this.createServerError(error, "Undefined Error");
     }
   }
   createConsumerError(message, error) {
@@ -92,7 +114,7 @@ class ErrorHandler {
       },
     };
   }
-  createServerError(error) {
+  createServerError(error, message) {
     return {
       status: 500,
       message: {
@@ -101,6 +123,7 @@ class ErrorHandler {
           "Please provide following information when creating a support ticket.",
         "Error Message: ": error.message,
         "Error: ": error.toString(),
+        "Custom Message From DevTeam:": message,
       },
     };
   }

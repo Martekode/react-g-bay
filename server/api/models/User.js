@@ -28,6 +28,10 @@ class User {
       "SELECT id,name,email,image_url FROM user_table WHERE name = ?";
     return this.pool.query(query, name);
   }
+  async getUserIdByEmail(email) {
+    const query = "SELECT id FROM user_table WHERE email = ?";
+    return this.pool.query(query, email);
+  }
   /*
  ___  _  __  ___ 
 | o \/ \/ _||_ _|
@@ -53,6 +57,27 @@ Here we define all Post methods
       "INSERT INTO user_table (name,password,email,image_url) VALUES(?,?,?,?)";
     return this.pool.query(query, [name, secret, email, imageUrl]);
   }
+  /*
+ _     ____  ____  ____  _____  _____
+/ \ /\/  __\/  _ \/  _ \/__ __\/  __/
+| | |||  \/|| | \|| / \|  / \  |  \  
+| \_/||  __/| |_/|| |-||  | |  |  /_ 
+\____/\_/   \____/\_/ \|  \_/  \____\
+     
+*/
+  //UPDATE BY ID
+  async updateUserName(id, newname) {
+    const query = "UPDATE user_table SET name = ? WHERE id = ?";
+    return this.pool.query(query, [newname, id]);
+  }
+
+  //ALL UPDATE BY EMAIL
+  async updateUserByMailName(email, newname) {
+    const query = "UPDATE user_table SET name = ? WHERE email = ?";
+    return this.pool.query(query, [newname, email]);
+  }
+
+  //HELPERS
   createRandomName() {
     let result = "";
     const nameLength = 8;
@@ -73,10 +98,5 @@ Here we define all Post methods
   }
 }
 
-/* 
-
-Email as ID
-
-*/
 const user = new User();
 module.exports = user;

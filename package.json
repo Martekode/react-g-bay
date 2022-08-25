@@ -21,7 +21,6 @@
   "devDependencies": {
     "nodemon": "^2.0.19",
     "parcel": "^2.0.0-rc.0"
-    
   },
   "dependencies": {
     "@types/react": "^18.0.17",
