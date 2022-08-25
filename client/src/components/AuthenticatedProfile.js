@@ -8,30 +8,30 @@ import axios from "axios";
     const {isAuthenticated, user} = useAuth0();
     const url = 'http://localhost:3050/api/user/new'
     const [data, setData] = useState({
-        name: "",
+        username: "",
         email: "",
         image_url: "",
     })
 
     const refactorUser = (oldUser) => {
         let newUser = {
-            name: oldUser.nickname,
+            username: oldUser.nickname,
             email: oldUser.email,
             image_url: oldUser.picture,
         };
+        console.log(newUser);
         setData(newUser)
+        axios.post(url,newUser).then(res => {
+            console.log(res.data)
+        })
     }
 
     useEffect(()=>{
         refactorUser(user)
-        axios.post(url,{
-            name: data.name,
-            email: data.email,
-            image_url: data.image_url,
-        }).then(res => {
-            console.log(res.data)
-        })
+        console.log(data);
     },[user])
+
+
 
     return(
         isAuthenticated && (
