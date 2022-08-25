@@ -132,9 +132,14 @@ Example:
 ```
 #### Get all products for a user by User Email
 This endpoint accepts an email and returns all the products for the user associated with that email. (If you want to keep the user's email private we suggest using this endpoint to make this request instead of passing it trough a url) - Tough this may be slower than the Get method(WIP)
+```js
+/api/product/all/owner/email
+```
+
 - This endpoint expects you to provide an email
 - If the email is not found in the database you will not be provided an error since this is not possible without overloading the database. It will return an empty array tough
     - If you want to check if an email exists you can use one of the User endpoints
+
 - Example of the expected Body for this endpoint in JSON!
 ```json
 {
