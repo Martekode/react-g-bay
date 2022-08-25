@@ -247,7 +247,7 @@ This getter returns true/false depending if the given email exists in the databa
 #### Create a new User
 Here you can create a new user, this endpoint expects a body with a username,email and image_url. The image_url is optional!. 
 ```
-/api/user/api/new
+/api/user/new
 ```
 This endpoint returns the newly created user ID and the complete user object in the db
 - Example of expected body:
