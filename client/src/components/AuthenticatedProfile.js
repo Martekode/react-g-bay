@@ -1,37 +1,9 @@
-import {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 import Avatar from 'react-avatar';
 import {useAuth0} from '@auth0/auth0-react';
-import axios from "axios";
 
 export default function AuthenticatedProfile() {
     const {isAuthenticated, user} = useAuth0();
-    const url = 'http://localhost:3050/api/user/new'
-    const [data, setData] = useState({
-        username: "",
-        email: "",
-        image_url: "",
-    })
-
-    const refactorUser = (oldUser) => {
-        let newUser = {
-            username: oldUser.nickname,
-            email: oldUser.email,
-            image_url: oldUser.picture,
-        };
-        console.log(newUser);
-        setData(newUser)
-        axios.post(url, newUser).then(res => {
-            console.log(res.data)
-        })
-    }
-
-    useEffect(() => {
-        if (isAuthenticated) {
-            refactorUser(user)
-        }
-        console.log(data);
-    }, [user])
 
 
     return (
