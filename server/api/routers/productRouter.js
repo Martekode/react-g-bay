@@ -95,17 +95,18 @@ router.post("/new", async (request, response) => {
     if (!(owner_id && name && price && description && image_url && category)) {
       throw new Error("undefined");
     }
-    const allowedCategories = product.getAllowedCategories();
-    let validatedCategory = "";
-    let categoryValid = false;
-    allowedCategories.forEach((allowedCategory) => {
-      if (categoryValid) return;
-      if (allowedCategory === category) {
-        categoryValid = true;
-        validatedCategory = category;
-      }
-    });
-    if (!categoryValid) {
+    // const allowedCategories = product.getAllowedCategories();
+    // let validatedCategory = "";
+    // let categoryValid = false;
+    // allowedCategories.forEach((allowedCategory) => {
+    //   if (categoryValid) return;
+    //   if (allowedCategory === category) {
+    //     categoryValid = true;
+    //     validatedCategory = category;
+    //   }
+    // });
+    let validatedCategory = product.validateCategory(category);
+    if (!validatedCategory) {
       throw new Error("BadCategory");
     }
     const result = await product.addNewProduct(
@@ -127,6 +128,10 @@ router.post("/new", async (request, response) => {
     response.status(handledError.status).json(handledError.message);
   }
 });
+router.post("/newbyemail", async (request, response) => {
+  const { email, name, price, description, image_url, category } = request.body;
+});
+//GET INFO BY POST
 router.post("/all/owner/email", async (request, response) => {
   try {
     const ownerEmail = request.body.email;
