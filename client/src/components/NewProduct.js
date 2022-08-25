@@ -31,7 +31,6 @@ function NewProduct () {
         const newestData = {...data}
         newestData[e.target.id] = e.target.value
         setData(newestData)
-        console.log(newestData);
     }
     return (
         <div>
@@ -43,10 +42,11 @@ function NewProduct () {
                 <input className='border-2  h-24 w-52 m-2' type="text" onChange={(e) => handle(e)} id="price" placeholder="price" value={data.price}></input>
                 <input className='border-2  h-24 w-52 m-2' type="text" onChange={(e) => handle(e)} id="image_url" placeholder="image_url" value={data.image_url}></input>
                 <input className='border-2  h-24 w-52 m-2' type="text" onChange={(e) => handle(e)} id="category" placeholder="category" value={data.category}></input>
+                <div className='flex justify-center items-center'>
+                    <button className='border w-24 bg-product mb-12'>Submit</button>
+                </div>
                 </form>
-            <div className='flex justify-center items-center'>
-                <button className='border w-24 bg-product mb-12'>Submit</button>
-            </div>
+
         </div>
     )
 }

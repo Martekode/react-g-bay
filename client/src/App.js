@@ -9,6 +9,8 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 // import axios from "axios";
 import ProductTest from "./pages/Product";
+import ProductCard from "./components/ProductCard";
+import NewProduct from "./components/NewProduct";
 
 
 function App() {
@@ -32,9 +34,8 @@ function App() {
             <Route path="/sell" element={<Sellpage />} />
         </Routes>
         <Routes>
-            <Route path="/product" element={<ProductTest />} />
+            <Route path="/product" element={<Checkout />} />
         </Routes>
-
         <Footer/>
     </div>
   );

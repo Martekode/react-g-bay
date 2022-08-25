@@ -1,7 +1,7 @@
 import React from 'react';
 
 const handleClick = event => {
-    window.open("http://localhost:3050/test","_self");
+    window.open("http://localhost:3050/product","_self");
 };
 
 const Home =() => {
