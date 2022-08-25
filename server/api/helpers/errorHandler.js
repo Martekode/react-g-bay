@@ -31,8 +31,17 @@ class ErrorHandler {
         );
       }
       case "BadCategory": {
-        const allowedCategories = product.getAllowedCategories()
-        return this.createConsumerError(`Currently only predefined categories are allowed: ${allowedCategories}`, error)
+        const allowedCategories = product.getAllowedCategories();
+        return this.createConsumerError(
+          `Currently only predefined categories are allowed: ${allowedCategories}`,
+          error
+        );
+      }
+      case "BadEmail": {
+        return this.createConsumerError(
+          "There is no user in the database with that email!",
+          error
+        );
       }
       default:
         return this.createServerError(error, "Undefined Error");

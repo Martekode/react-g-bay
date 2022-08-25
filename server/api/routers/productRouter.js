@@ -6,6 +6,7 @@ const router = express.Router();
 const product = require("../models/Product");
 //Get Helpers
 const errorHandler = require("../helpers/errorHandler");
+const user = require("../models/user");
 //BASE PATH - DEV INDICATOR
 //We use this to make sure our router works :D
 router.get("/", (_request, response) => {
@@ -126,6 +127,39 @@ router.post("/new", async (request, response) => {
     response.status(handledError.status).json(handledError.message);
   }
 });
+router.post("/all/owner/email", async (request, response) => {
+  try {
+    const ownerEmail = request.body.email;
+    if (!ownerEmail) {
+      throw new Error("undefined");
+    }
+    const result = await product.getAllProductsByOwnerEmail(ownerEmail);
+    response.status(200).json(result);
+  } catch (error) {
+    const handledError = errorHandler.handleProductError(error);
+    response.status(handledError.status).json(handledError.message);
+  }
+});
+// This method works, but connects to the database twice! Time to change the query a bit and make it work connecting just once
+// router.post("/all/owner/email", async (request, response) => {
+//   try {
+//     const ownerEmail = request.body.email;
+//     if (!ownerEmail) {
+//       throw new Error("undefined");
+//     }
+//     const ownerIdObject = await user.getUserIdByEmail(ownerEmail);
+//     if (!ownerIdObject[0]) {
+//       throw new Error("BadEmail");
+//     }
+//     const ownerId = ownerIdObject[0].id;
+//     const result = await product.getAllProductsByOwnerId(ownerId);
+//     response.status(200).json(result);
+//   } catch (error) {
+//     const handledError = errorHandler.handleProductError(error);
+//     response.status(handledError.status).json(handledError.message);
+//   }
+// });
+
 /*
  _(`-')    (`-')  _         (`-')  _(`-')      (`-')  _ 
 ( (OO ).-> ( OO).-/  <-.    ( OO).-/( OO).->   ( OO).-/ 

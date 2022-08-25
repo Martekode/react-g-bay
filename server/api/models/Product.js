@@ -1,12 +1,21 @@
 const pool = require("../helpers/database");
 class Product {
   //Cards,Miniatures,Gaming,Anime,Boardgames,Comics,D&D,Other
-  allowedCategories = ['cards', 'miniatures', 'gaming', 'anime', 'boardgames', 'comics', 'dungeons and dragons', 'other']
+  allowedCategories = [
+    "cards",
+    "miniatures",
+    "gaming",
+    "anime",
+    "boardgames",
+    "comics",
+    "dungeons and dragons",
+    "other",
+  ];
   constructor() {
     this.pool = pool;
   }
   getAllowedCategories() {
-    return this.allowedCategories
+    return this.allowedCategories;
   }
   /*
   __  ___  ___ 
@@ -35,6 +44,16 @@ class Product {
     const query = "SELECT * FROM product_table WHERE category = ?";
     return this.pool.query(query, [category]);
   }
+  async getAllProductsByOwnerId(id) {
+    const query = "SELECT * FROM product_table WHERE owner_id = ?";
+    return this.pool.query(query, [id]);
+  }
+  async getAllProductsByOwnerEmail(email) {
+    const query =
+      "SELECT product_table.id,product_table.owner_id,product_table.name,product_table.price,product_table.description,product_table.image_url,product_table.category FROM product_table LEFT JOIN user_table on product_table.owner_id = user_table.id WHERE email = ?;";
+    return this.pool.query(query, [email]);
+  }
+
   /*
  ___  _  __  ___ 
 | o \/ \/ _||_ _|

@@ -28,6 +28,10 @@ class User {
       "SELECT id,name,email,image_url FROM user_table WHERE name = ?";
     return this.pool.query(query, name);
   }
+  async getUserIdByEmail(email) {
+    const query = "SELECT id FROM user_table WHERE email = ?";
+    return this.pool.query(query, email);
+  }
   /*
  ___  _  __  ___ 
 | o \/ \/ _||_ _|
