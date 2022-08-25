@@ -18,7 +18,7 @@ class ErrorHandler {
             }
             case "BadId": {
                 return this.createConsumerError(
-                    "No Product was found by this Id",
+                    "No match was found by this Id",
                     error
                 );
             }
@@ -44,7 +44,7 @@ class ErrorHandler {
                 );
             }
             case "BadId": {
-                return this.createConsumerError("No User was found by this Id", error);
+                return this.createConsumerError("No match was found by this Id", error);
             }
             case "BadUser": {
                 return this.createConsumerError(
