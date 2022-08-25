@@ -84,6 +84,7 @@ router.get("/email/check/:email", async (request, response) => {
     response.status(handledError.status).json(handledError.message);
   }
 });
+router.get("/")
 /*
  ___  _  __  ___
 | o \/ \/ _||_ _|
