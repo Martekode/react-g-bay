@@ -216,13 +216,36 @@ router.put("/update/byid/image", async (req, res) => {
       throw new Error("BadImage");
     }
     const result = await user.updateImage(userid, image_url);
-    console.log(result);
-    res.status(200).json("Update Complete");
+    if (!result.affectedRows) {
+      throw new Error("BadEmail");
+    }
+    const updatedUser = await user.getUserByID(userid);
+    res.status(200).json(updatedUser[0]);
   } catch (err) {
     const ve = errorHandler.handleUserError(err);
     res.status(ve.status).json(ve.message);
   }
 });
 //UPDATE USER IMAGE URL TROUGH USER EMAIL
-
+router.put("/update/bymail/image", async (req, res) => {
+  try {
+    const { email, image_url } = req.body;
+    if (!email && image_url) {
+      throw new Error("undefined");
+    }
+    const isImageValid = await validator.validateImageUrl(image_url);
+    if (!isImageValid) {
+      throw new Error("BadImage");
+    }
+    const result = await user.updateImageByMail(email, image_url);
+    if (!result.affectedRows) {
+      throw new Error("BadEmail");
+    }
+    const updatedUser = await user.getUserByEmail(email);
+    res.status(200).json(updatedUser[0]);
+  } catch (err) {
+    const handledError = errorHandler.handleUserError(err);
+    res.status(handledError.status).json(handledError.message);
+  }
+});
 module.exports = router;

@@ -110,13 +110,13 @@ class ErrorHandler {
       //INTERNAL SERVER ERRORS - QUERY WENT WRONG
       case "UpdateError": {
         return this.createServerError(
-          error,
-          "There was an error updating the Data in the database"
+          "There was an error updating the Data in the database",
+          error
         );
       }
 
       default:
-        return this.createServerError(error, "Undefined Error");
+        return this.createServerError("Undefined Error", error);
     }
   }
   createConsumerError(message, error) {
@@ -132,8 +132,6 @@ class ErrorHandler {
   }
   createServerError(message, error) {
     if (error.cause) {
-      console.log("Cause");
-      console.table(error.cause);
       return {
         status: 500,
         message: {

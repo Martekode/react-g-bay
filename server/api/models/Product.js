@@ -1,16 +1,5 @@
 const pool = require("../helpers/database");
 class Product {
-  //Cards,Miniatures,Gaming,Anime,Boardgames,Comics,D&D,Other
-  allowedCategories = [
-    "cards",
-    "miniatures",
-    "gaming",
-    "anime",
-    "boardgames",
-    "comics",
-    "dungeons and dragons",
-    "other",
-  ];
   constructor() {
     this.pool = pool;
   }
@@ -106,22 +95,6 @@ Here we define all Post methods
   async deleteProductById(id) {
     const query = "DELETE FROM product_table WHERE id = ?";
     return this.pool.query(query, [id]);
-  }
-  validateCategory(category) {
-    let validated = "";
-    let valid = false;
-    this.allowedCategories.forEach((allowedCategory) => {
-      if (valid) return;
-      if (allowedCategory === category) {
-        validated = category;
-        valid = true;
-      }
-    });
-    if (valid) {
-      return validated;
-    } else {
-      return false;
-    }
   }
 }
 const product = new Product();

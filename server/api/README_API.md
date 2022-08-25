@@ -308,7 +308,7 @@ This endpoint returns the newly created user ID and the complete user object in 
 }
 ```
 ### PUT
-#### Update by ID
+#### Update username by ID
 This endpoint will allow you to change a user's name by providing the userid and the newname 
 ```js
 /api/user/update/byid/name
@@ -321,7 +321,7 @@ this endpoint returns the updated user object
     "newname":"Example"
 }
 ```
-#### Update by Email
+#### Update username by Email
 This endpoiunt will allow you to change a user's name by proviiding the user's email and the new name
 ```js
 /api/user/update/bymail/name
@@ -334,6 +334,31 @@ It wil return the updated user object to you
     "newname":"Example"
 }
 ```
+#### UPDATE USER IMAGE BY ID
+this endpoint allows you to change a user's image_url by providing the user's id and the new image url. This url still has to be valid!
+```js
+/api/user/update/byid/image
+```
+- Example of expected body: 
+```json
+{
+    "userid":"5",
+    "image_url":"https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg"
+}
+```
 
+#### UPDDATE USER IMAGE BY EMAIL
+This does the same as above but you can use the user's email
+```js
+/api/user/update/byid/image
+```
+- Example of expected body:
+```json
+{
+    "email":"test@test.com",
+    "image_url":"https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg"
+}
+```
+###
 ### DELETE
 **Happy Coding!**
