@@ -90,9 +90,9 @@ Returns all categories currently available in the product database
 ````js
 /api/product/owner/id/:id
 ````
-#### Get All Product Id's By Email
-````
-
+#### Get All Products By Email
+````js
+api/product/all/owner/email/:email
 ````
 ### POST
 Adding a new product can be done through a POST request on the following endpoint
