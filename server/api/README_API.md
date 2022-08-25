@@ -115,11 +115,12 @@ Example of a valid and accepted body at this endpoint:
 - The API will respond with a json object containing:
     - The Added product's ID
     - The total Added product as it is stored in the database
+!!!! THE PRODUCT RETURNED HERE WILL BE REMOVED IN PRODUCTION DO NOT RELY ON THIS AS THIS REQUIRES MULTIPLE FETCHES SERVER SIDE EVEN IF ITS NOT USED
 Example:
 ```json
 {
-    "Added product id:": "47",
-    "Added product: ": {
+    "AddedProductId:": "47",
+    "AddedProduct: ": {
         "id": 47,
         "owner_id": 1,
         "name": "tesdddsdftio",
@@ -128,6 +129,30 @@ Example:
         "image_url": "https://assets.pokemon.com/assets/cms2/img/lalaland.png",
         "category": "APItest"
     }
+}
+```
+#### ADD a product using user email as identifier!
+Just like above you can add a new product, but avoid fetching the user's ID in case you don't have it already by just using the user's email.
+- Endpoint:
+```js
+/api/product/newbyemail
+```
+- Expected body consists of the same as above but instead you will supply an email instead of the owner_id
+- Example of an accepted body:
+```json
+{
+    "email":"Brian@gbay.org",
+    "name":"Product added using email as user identifier",
+    "price":900,
+    "description":"This query broke my brain, but it works.",
+    "image_url":"https://c.tenor.com/w-PCA2wkMQEAAAAM/mind-blown-shocked.gif",
+    "category":"other"
+}
+```
+- In the response you will receive the ID of the newly added product in case you need it!
+```json
+{
+    "AddedProductId": "72"
 }
 ```
 #### Get all products for a user by User Email
