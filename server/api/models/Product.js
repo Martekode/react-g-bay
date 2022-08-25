@@ -82,7 +82,7 @@ Here we define all Post methods
     category
   ) {
     const query =
-      "INSERT INTO product_table(owned_id,name,price,description,image_url,category) VALUES((SELECT id FROM user_table WHERE email = ? ),?,?,?,?,?)";
+      "INSERT INTO product_table(owner_id,name,price,description,image_url,category) VALUES((SELECT id FROM user_table WHERE email = ? ),?,?,?,?,?)";
     return this.pool.query(query, [
       email,
       name,

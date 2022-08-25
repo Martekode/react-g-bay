@@ -129,7 +129,29 @@ router.post("/new", async (request, response) => {
   }
 });
 router.post("/newbyemail", async (request, response) => {
-  const { email, name, price, description, image_url, category } = request.body;
+  try {
+    const { email, name, price, description, image_url, category } =
+      request.body;
+    if (!(email && name && price && description && image_url && category)) {
+      throw new Error("undefined");
+    }
+    let validCategory = product.validateCategory(category);
+    if (!validCategory) {
+      throw new Error("BadCategory");
+    }
+    const result = await product.addNewProductByOwnerEmail(
+      email,
+      name,
+      price,
+      description,
+      image_url,
+      category
+    );
+    response.status(200).json({ AddedProductId: result.insertId.toString() });
+  } catch (err) {
+    const e = errorHandler.handleProductError(err);
+    response.status(e.status).json(e.message);
+  }
 });
 //GET INFO BY POST
 router.post("/all/owner/email", async (request, response) => {
