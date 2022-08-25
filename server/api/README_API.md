@@ -311,7 +311,7 @@ This endpoint returns the newly created user ID and the complete user object in 
 #### Update by ID
 This endpoint will allow you to change a user's name by providing the userid and the newname 
 ```js
-/api/user/update/name
+/api/user/update/byid/name
 ```
 this endpoint returns the updated user object
 - Example of expected body:

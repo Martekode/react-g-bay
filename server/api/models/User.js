@@ -67,10 +67,14 @@ Here we define all Post methods
     return this.pool.query(query, [newname, id]);
   }
 
-  //ALL UPDATE BY EMAIL
+  //UPDATE BY EMAIL
   async updateUserByMailName(email, newname) {
     const query = "UPDATE user_table SET name = ? WHERE email = ?";
     return this.pool.query(query, [newname, email]);
+  }
+  async updateImage(id, newImageUrl) {
+    const query = "UPDATE user_table SET image_url = ? WHERE id LIKE ?";
+    return this.pool.query(query, [newImageUrl, id]);
   }
 
   //HELPERS

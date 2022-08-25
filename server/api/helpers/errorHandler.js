@@ -74,6 +74,12 @@ class ErrorHandler {
           error
         );
       }
+      case "BadImage": {
+        return this.createConsumerError(
+          "That image is not Valid! It is either not online, or not an image",
+          error
+        );
+      }
       case "BadEmail": {
         return this.createConsumerError("That Email is not valid!", error);
       }

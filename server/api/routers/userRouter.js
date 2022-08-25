@@ -161,7 +161,7 @@ router.post("/newbyemail", async (request, response) => {
                                      
 */
 //UPDATE BY ID
-router.put("/update/name", async (request, response) => {
+router.put("/update/byid/name", async (request, response) => {
   try {
     const { userid, newname } = request.body;
     if (!(userid && newname)) {
@@ -182,7 +182,6 @@ router.put("/update/name", async (request, response) => {
     response.status(handledError.status).json(handledError.message);
   }
 });
-
 //UPDATE USERNAME TROUGH EMAIL
 router.put("/update/bymail/name", async (request, response) => {
   try {
@@ -205,4 +204,25 @@ router.put("/update/bymail/name", async (request, response) => {
     response.status(handledError.status).json(handledError.message);
   }
 });
+//UPDATE USER IMAGE URL TROUGH USER ID
+router.put("/update/byid/image", async (req, res) => {
+  try {
+    const { userid, image_url } = req.body;
+    if (!(userid && image_url)) {
+      throw new Error("undefined");
+    }
+    const isImageValid = await validator.validateImageUrl(image_url);
+    if (!isImageValid) {
+      throw new Error("BadImage");
+    }
+    const result = await user.updateImage(userid, image_url);
+    console.log(result);
+    res.status(200).json("Update Complete");
+  } catch (err) {
+    const ve = errorHandler.handleUserError(err);
+    res.status(ve.status).json(ve.message);
+  }
+});
+//UPDATE USER IMAGE URL TROUGH USER EMAIL
+
 module.exports = router;

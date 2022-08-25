@@ -41,10 +41,7 @@ class Validator {
         return false;
       }
       const reachable = await this.checkIfLinkIsReachable(url);
-      if (!reachable) {
-        return false;
-      }
-      return true;
+      return !!reachable;
     } catch (err) {
       throw new Error("server", { cause: error });
     }
