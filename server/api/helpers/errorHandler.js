@@ -44,6 +44,12 @@ class ErrorHandler {
           error
         );
       }
+      case "Mailer": {
+        return this.createServerError(
+          `Something went wrong with the server's mailing system`,
+          error
+        );
+      }
       case "server": {
         return this.createServerError(
           "Something went wrong on the server, We are sorry!",
