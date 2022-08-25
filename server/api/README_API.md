@@ -87,6 +87,7 @@ Returns all categories currently available in the product database
 /api/product/categories
 ```
 ### POST
+#### Add a product with Owner-ID
 Adding a new product can be done trough a POST request on the following endpoint
 ```js
 /api/product/new
@@ -129,13 +130,40 @@ Example:
     }
 }
 ```
-**KNOWN ERRORS- W.I.P**
-- Currently Any Category will be accepted, since the set of useable categories has not been defined yet.
-- Currently specifying the ID of a non existant used will return a server error - since the user endpoint is still in development
-
-~~**!IMPORTANT!**~~
-~~Extra: This request's response will always provide you with the ID of the newly added product.~~
-
+#### Get all products for a user by User Email
+This endpoint accepts an email and returns all the products for the user associated with that email. (If you want to keep the user's email private we suggest using this endpoint to make this request instead of passing it trough a url) - Tough this may be slower than the Get method(WIP)
+- This endpoint expects you to provide an email
+- If the email is not found in the database you will not be provided an error since this is not possible without overloading the database. It will return an empty array tough
+    - If you want to check if an email exists you can use one of the User endpoints
+- Example of the expected Body for this endpoint in JSON!
+```json
+{
+    "email":"Michael@gbay.org"
+}
+```
+- Example of the response you can get when using this endpoint:
+```json
+[
+    {
+        "id": 4,
+        "owner_id": 3,
+        "name": "Strawberry",
+        "price": "2",
+        "description": "Fresh Strawberry",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Aardbei_Karina.jpg?uselang=nl",
+        "category": "Fruit"
+    },
+    {
+        "id": 32,
+        "owner_id": 3,
+        "name": "tessdftio",
+        "price": "586",
+        "description": "OverffffRated",
+        "image_url": "https://assets.pokemon.com/assets/cms2/img/lalaland.png",
+        "category": "APItest"
+    }
+]
+```
 ### DELETE
 Deleting a product from the database
 #### Delete a product by ID
