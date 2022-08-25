@@ -4,9 +4,12 @@ const express = require("express");
 const router = express.Router();
 //Get model
 const product = require("../models/Product");
+const user = require("../models/User");
 //Get Helpers
 const errorHandler = require("../helpers/errorHandler");
 const validator = require("../helpers/validator");
+const sendBoughtMail = require("../helpers/mailer");
+const sendSoldMail = require("../helpers/mailer");
 //BASE PATH - DEV INDICATOR
 //We use this to make sure our router works :D
 router.get("/", (_request, response) => {
@@ -204,4 +207,52 @@ router.delete("/delete/:id", async (request, response) => {
   }
 });
 
+//SALE
+//await sendMail("yascher@gbay.com", "customer@online.be", result[0]);
+router.post("/sale", async (request, response) => {
+  try {
+    const { seller_Id, buyer_Id, product_Id } = request.body;
+    if (!(seller_Id, buyer_Id, product_Id)) {
+      throw new Error("undefined");
+    }
+
+    const sellerFetch = await user.getUserByID(seller_Id);
+    if (!sellerFetch.length) {
+      throw new Error("BadId");
+    }
+    const seller = sellerFetch[0];
+    const buyerFetch = await user.getUserByID(buyer_Id);
+    if (!buyerFetch.length) {
+      throw new Error("BadId");
+    }
+    const buyer = buyerFetch[0];
+    const productFetch = await product.getProductById(product_Id);
+    if (!productFetch.length) {
+      throw new Error("BadId");
+    }
+    const tradedProduct = productFetch[0];
+    const mailToBuyer = await sendBoughtMail(
+      buyer,
+      seller,
+      tradedProduct
+    ).catch((err) => {
+      console.log(err);
+      throw new Error("");
+    });
+    const mailToSeller = await sendSoldMail(buyer, seller, tradedProduct).catch(
+      (err) => {
+        throw new Error("");
+      }
+    );
+    console.log(mailToSeller);
+    response.status(200).json({
+      "IT WORKED!": "lel",
+      MailSentToBuyer: mailToBuyer,
+      MailSentToSeller: mailToSeller,
+    });
+  } catch (err) {
+    const handledError = errorHandler.handleProductError(err);
+    response.status(handledError.status).json(handledError.message);
+  }
+});
 module.exports = router;

@@ -32,6 +32,10 @@ class User {
     const query = "SELECT id FROM user_table WHERE email = ?";
     return this.pool.query(query, email);
   }
+  async getUserEmailById(id) {
+    const query = "SELECT email FROM user_table WHERE id = ?";
+    return this.pool.query(query, id);
+  }
   /*
  ___  _  __  ___ 
 | o \/ \/ _||_ _|

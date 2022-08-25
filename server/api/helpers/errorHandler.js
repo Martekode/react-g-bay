@@ -21,7 +21,7 @@ class ErrorHandler {
       }
       case "BadId": {
         return this.createConsumerError(
-          "No Product was found by this Id",
+          "Nothing in the database matched the given ID(s)",
           error
         );
       }
