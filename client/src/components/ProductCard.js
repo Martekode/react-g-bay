@@ -17,6 +17,7 @@ function ProductCard () {
                 setPrice(data.price)
                 setDescription(data.description)
                 setImage(data.image)
+
         }
         getProductData();
     },[])

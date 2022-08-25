@@ -1,6 +1,5 @@
 import {Link} from "react-router-dom";
 import Avatar from 'react-avatar';
-import NewProduct from "../components/NewProduct";
 
 function Profile() {
     return (
@@ -13,9 +12,9 @@ function Profile() {
                     <div className=' w-52 h-52 ml-10'>
                         <Avatar name="Tim Broos" className='rounded-full scale-150 ml-7 mt-8'/>
                         <div className='static flex flex-col mt-32 ml-10'>
-                            <div className='p-6 font-bangers'>Tim Broos</div>
-                            <div className='p-6 font-bangers'>tim.broos@becode.org</div>
-                         <Link to="/sell"><div className='p-6 hover:text-hovers font-bangers' >Sell products</div></Link>
+                            <div className='p-6 font-bangers text-3xl'>Tim Broos</div>
+                            <div className='p-6 font-bangers text-3xl'>tim.broos@becode.org</div>
+                         <Link to="/sell"><div className='p-6 hover:text-hovers font-bangers text-3xl' >Sell products</div></Link>
                         </div>
                     </div>
                 <div className='absolute left-1/2 border-2 w-fit h-52 mt-12' >

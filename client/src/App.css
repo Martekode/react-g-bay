@@ -40,8 +40,11 @@
 body {
   /*background: rgb(251,63,63);*/
   /*background: linear-gradient(90deg, rgba(251,63,63,1) 0%, rgba(251,145,64,1) 8%, rgba(251,202,65,1) 16%, rgba(175,251,66,1) 25%, rgba(106,234,66,1) 33%, rgba(67,214,143,1) 42%, rgba(96,194,188,1) 51%, rgba(125,152,175,1) 60%, rgba(148,139,154,1) 68%, rgba(177,125,170,1) 77%, rgba(210,109,152,1) 87%, rgba(252,88,70,1) 100%);*/
-  background-color: #E5DCCB;
-  /*background-image: url("https://images.unsplash.com/photo-1504672281656-e4981d70414b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80");*/
-  /*background-repeat: no-repeat;*/
-  /*background-size: cover;*/
+  /*background-color: #899c8c;*/
+  background-image: url("https://images.unsplash.com/photo-1579492450119-80542d516179?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80");
+  /*background-image: url("https://media.istockphoto.com/photos/blank-light-watercolor-background-picture-id1094522042?b=1&k=20&m=1094522042&s=612x612&w=0&h=LYEbrb4gchdjeMmJjaK5I_T1gsvDtTZI--_VWlrnGpk=");*/
+  /*background-image: url("https://media.istockphoto.com/photos/abstract-art-background-green-color-multicolor-painting-on-canvas-picture-id1152428418?b=1&k=20&m=1152428418&s=612x612&w=0&h=gWblXDfMqSivptx3PL2hvNhBKKidNAOyJaKQE0WELrs=");*/
+  background-repeat: no-repeat;
+  background-size: cover;
+  /*background-blend-mode: darken;*/
 }

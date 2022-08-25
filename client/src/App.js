@@ -7,11 +7,7 @@ import Home from "./pages/Home";
 import Sellpage from "./pages/Sellpage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-// import axios from "axios";
-import ProductTest from "./pages/Product";
-import ProductCard from "./components/ProductCard";
-import NewProduct from "./components/NewProduct";
-
+import Category from "./pages/Category";
 
 function App() {
 
@@ -34,7 +30,7 @@ function App() {
             <Route path="/sell" element={<Sellpage />} />
         </Routes>
         <Routes>
-            <Route path="/product" element={<Checkout />} />
+            <Route path="/category" element={<Category />} />
         </Routes>
         <Footer/>
     </div>
