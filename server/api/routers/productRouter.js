@@ -8,8 +8,8 @@ const user = require("../models/User");
 //Get Helpers
 const errorHandler = require("../helpers/errorHandler");
 const validator = require("../helpers/validator");
-const sendBoughtMail = require("../helpers/mailer");
-const sendSoldMail = require("../helpers/mailer");
+const sendBoughtMail = require("../helpers/mailForBuyer");
+const sendSoldMail = require("../helpers/mailForSeller");
 //BASE PATH - DEV INDICATOR
 //We use this to make sure our router works :D
 router.get("/", (_request, response) => {
@@ -208,7 +208,6 @@ router.delete("/delete/:id", async (request, response) => {
 });
 
 //SALE
-//await sendMail("yascher@gbay.com", "customer@online.be", result[0]);
 router.post("/sale", async (request, response) => {
   try {
     const { seller_Id, buyer_Id, product_Id } = request.body;
@@ -236,19 +235,21 @@ router.post("/sale", async (request, response) => {
       seller,
       tradedProduct
     ).catch((err) => {
-      console.log(err);
-      throw new Error("");
+      console.log(`Error in mail to buyer: ${err.message}`);
+      throw new Error("Mailer");
     });
     const mailToSeller = await sendSoldMail(buyer, seller, tradedProduct).catch(
       (err) => {
-        throw new Error("");
+        console.log(`Error in mail to seller: ${err.message}`);
+        throw new Error("Mailer");
       }
     );
-    console.log(mailToSeller);
+    product.deleteProductById(tradedProduct.id);
     response.status(200).json({
-      "IT WORKED!": "lel",
+      salecompleted: true,
       MailSentToBuyer: mailToBuyer,
       MailSentToSeller: mailToSeller,
+      SoldProduct: tradedProduct,
     });
   } catch (err) {
     const handledError = errorHandler.handleProductError(err);
