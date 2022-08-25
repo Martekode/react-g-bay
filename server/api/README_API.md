@@ -154,6 +154,7 @@ Just like above you can add a new product, but avoid fetching the user's ID in c
 {
     "AddedProductId": "72"
 }
+- If the email does not exist you  will get an error telling you you provided a bad email, if you get another error please let us know!
 ```
 #### Get all products for a user by User Email
 This endpoint accepts an email and returns all the products for the user associated with that email. (If you want to keep the user's email private we suggest using this endpoint to make this request instead of passing it trough a url) - Tough this may be slower than the Get method(WIP)
