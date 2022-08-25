@@ -3,7 +3,7 @@ import {FaGithub} from "react-icons/fa";
 class Footer extends Component {
     render() {
         return (
-            <footer className='bg-primary flex justify-evenly items-center h-16'>
+            <footer className='bg-primary flex justify-evenly items-center h-16 font-bangers'>
                 <p>Copyright @BECODE 2022 </p>
                 <a href='https://github.com/glinchflash' >Glenn <FaGithub className='ml-3'/></a>
                 <a href='https://github.com/YasserB94'>Yasser <FaGithub className='ml-3'/></a>

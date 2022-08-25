@@ -6,16 +6,16 @@ function Profile() {
     return (
         <div>
             <div className='w-100% h-screen'>
-                <p className='text-2xl ml-24 mt-24'>Profile Pic</p>
+                <p className='text-3xl ml-28 mt-24 font-bangers'>Profile</p>
                 <div className='absolute left-1/2 border-2 w-fit h-52 mb-24' >
                     <h1>Product-List with everything you are Selling</h1>
                 </div>
                     <div className=' w-52 h-52 ml-10'>
                         <Avatar name="Tim Broos" className='rounded-full scale-150 ml-7 mt-8'/>
                         <div className='static flex flex-col mt-32 ml-10'>
-                            <div className='p-6'>Tim Broos</div>
-                            <div className='p-6'>tim.broos@becode.org</div>
-                         <Link to="/sell"><div className='p-6 hover:text-hovers' >Sell products</div></Link>
+                            <div className='p-6 font-bangers'>Tim Broos</div>
+                            <div className='p-6 font-bangers'>tim.broos@becode.org</div>
+                         <Link to="/sell"><div className='p-6 hover:text-hovers font-bangers' >Sell products</div></Link>
                         </div>
                     </div>
                 <div className='absolute left-1/2 border-2 w-fit h-52 mt-12' >

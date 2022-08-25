@@ -31,7 +31,8 @@ function Checkout() {
 
     return (
         <div>
-            <div className='flex flex-col items-center'>
+            <p className='flex justify-center items-center text-6xl mt-24 font-bangers'>Checkout</p>
+            <div className='flex flex-col items-center mt-12'>
                 <ul>
                     {productArray.map((product, i) => {
                         priceArray.push(product.amount * product.price)
@@ -45,7 +46,7 @@ function Checkout() {
                         );
                     })}
                 </ul>
-                <p>Total price : {totalPrice ? totalPrice : setTotalPrice(priceArray.reduce((a, v) => a + v, 0)) }</p>
+                <p className='mt-12 mb-12 text-3xl font-bangers'>Total price : {totalPrice ? totalPrice : setTotalPrice(priceArray.reduce((a, v) => a + v, 0)) }</p>
             </div>
         </div>
     )

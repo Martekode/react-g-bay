@@ -7,11 +7,9 @@ import Home from "./pages/Home";
 import Sellpage from "./pages/Sellpage";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import ProductPage from "./pages/Product";
-import Category from "./pages/Category";
 // import axios from "axios";
-import Test from "./components/Test";
-import NewProduct from "./components/NewProduct";
+import ProductTest from "./pages/Product";
+
 
 function App() {
 
@@ -21,7 +19,6 @@ function App() {
   return (
     <div>
         <Navbar/>
-        <NewProduct />
         <Routes>
             <Route path="/" element={<Home />} />
         </Routes>
@@ -35,14 +32,9 @@ function App() {
             <Route path="/sell" element={<Sellpage />} />
         </Routes>
         <Routes>
-            <Route path="/product" element={<ProductPage />} />
+            <Route path="/product" element={<ProductTest />} />
         </Routes>
-        <Routes>
-            <Route path="/category" element={<Category />} />
-        </Routes>
-        <Routes>
-            <Route path="/test" element={<Test />} />
-        </Routes>
+
         <Footer/>
     </div>
   );

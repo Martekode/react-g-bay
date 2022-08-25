@@ -2,6 +2,10 @@
 module.exports = {
   content: ["./src/*.{js,jsx}","./src/**/*.{js,jsx}"],
   theme: {
+    fontFamily: {
+      'bangers': ['"Bangers"', 'cursive'],
+      'faster-one': ['"Faster One"', 'cursive']
+    },
     backgroundImage: {
       'geek': "url('https://wallpaperaccess.com/full/303589.jpg')",
       'geekTwo': "url('https://www.geekculture.com/blurbs/geekbay/geekbayimages/geekbaylogo.gif')",

@@ -15,14 +15,14 @@ const Navbar = () => {
                     alt="logo"
                 />
             </Link>
-                <div className="flex justify-between">
+                <div className="flex justify-center items-center">
                     <input className="bg-background focus:outline-none border border-secondary form-control mx-0 rounded w-60" type="search" placeholder="Search"
                            aria-label="Search"/>
                     <BsSearch className="mt-1 ml-2"/>
                 </div>
                 <ul className='flex'>
                     <li className='flex flex-row'>
-                        <button className='hover:bg-secondary border-2 rounded-full w-32 hover:text-primary'>Log in / Register</button>
+                        <button className='hover:bg-secondary border-2 rounded-full w-32 hover: font-bangers'>Log in / Register</button>
                         <Link className='p-4' to='/profile'><CgProfile/></Link>
                         <Link className='p-4' to='/'><IoHomeSharp/></Link>
                         <Link className="p-4" to='/checkout'><FaShoppingCart/></Link>
