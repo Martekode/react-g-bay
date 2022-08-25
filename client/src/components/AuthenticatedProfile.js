@@ -27,7 +27,9 @@ import axios from "axios";
     }
 
     useEffect(()=>{
-        refactorUser(user)
+        if (isAuthenticated){
+            refactorUser(user)
+        }
         console.log(data);
     },[user])
 
