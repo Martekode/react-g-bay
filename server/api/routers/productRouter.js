@@ -6,6 +6,8 @@ const router = express.Router();
 const product = require("../models/Product");
 //Get Helpers
 const errorHandler = require("../helpers/errorHandler");
+const user = require("../models/User");
+
 //BASE PATH - DEV INDICATOR
 //We use this to make sure our router works :D
 router.get("/", (_request, response) => {
@@ -80,7 +82,38 @@ router.get("/categories", async (_request, response) => {
         response.status(handledError.status).json(handledError.message);
     }
 });
+// get all products by owner id
+router.get("/owner/id/:id" , async (request, response) =>{
+    try {
+        const userid = request.params.id;
+        const checkValidID = await user.getUserByID(userid);
+        if (!checkValidID.length) {
+            throw new Error("BadId");
+        }
+        const result = await product.getAllProductsByOwnerId(userid);
+        response.status(200).json(result);
+    } catch (error) {
+        const handleError = errorHandler.handleProductError(error);
+        response.status(handleError.status).json(handleError.message);
+    }
+});
+// get all products by user email
+router.get("/all/owner/email/:email", async (request, response)=>{
+    try {
+        const result  = await product.getAllProductsByEmail(request.params.email);
+        response.status(200).json(result);
+    } catch (error) {
+        const handleError = errorHandler.handleProductError(error);
+        response.status(handleError.status).json(handleError.message);
+    }
+})
 /*
+api/product/categories
+api/product/owner/id/5
+api/product/owner/email/:email
+
+site.com/api/product/products/owner/4948
+
  ___  _  __  ___
 | o \/ \/ _||_ _|
 |  _( o )_ \ | |
@@ -147,7 +180,7 @@ router.delete("/delete/:id", async (request, response) => {
 });
 module.exports = router;
 
-//!!!ADD MODEL TO HANDLE ERROR -> Takes error code -> Returns error message :: Does not interfer with HTTP
+//!!!ADD MODEL TO HANDLE ERROR -> Takes error code -> Returns error message :: Does not interfere with HTTP
 //GET PRODUCT BY CATEGORY
 // router.get("/category/:category", async (request, response) => {
 //   try {
