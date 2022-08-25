@@ -1,4 +1,6 @@
-import React from 'react';
+import React,{useEffect, useState} from 'react';
+import axios from "axios";
+import {useAuth0} from '@auth0/auth0-react';
 
 const handleClick = event => {
     window.open("http://localhost:3050/category","_self");
@@ -6,6 +8,34 @@ const handleClick = event => {
 
 
 const Home =() => {
+    const {isAuthenticated, user} = useAuth0();
+    const url = 'http://localhost:3050/api/user/new'
+    const [data, setData] = useState({
+        username: "",
+        email: "",
+        image_url: "",
+    })
+
+    const refactorUser = (oldUser) => {
+        let newUser = {
+            username: oldUser.nickname,
+            email: oldUser.email,
+            image_url: oldUser.picture,
+        };
+        console.log(newUser);
+        setData(newUser)
+        axios.post(url, newUser).then(res => {
+            console.log(res.data)
+        })
+    }
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            refactorUser(user)
+        }
+        console.log(data);
+    }, [user])
+
     return (
 
         <div>
