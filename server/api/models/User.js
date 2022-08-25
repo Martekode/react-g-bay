@@ -40,19 +40,15 @@ class User {
 Here we define all Post methods
 */
   async createNewUser(username, email, image_url) {
-    if (image_url === undefined) {
-      image_url = "";
-    }
     const secret = "placeholderpw";
     const query =
       "INSERT INTO user_table (name,password,email,image_url) VALUES(?,?,?,?)";
     //Creating placeholder for password <> Auth done by Auth0 ?
     return this.pool.query(query, [username, secret, email, image_url]);
   }
-  async createNewUserEmailOnly(email) {
+  async createNewUserEmailOnly(email, imageUrl) {
     const name = this.createRandomName();
     const secret = this.createRandomPassword();
-    const imageUrl = "";
     const query =
       "INSERT INTO user_table (name,password,email,image_url) VALUES(?,?,?,?)";
     return this.pool.query(query, [name, secret, email, imageUrl]);
@@ -79,7 +75,7 @@ Here we define all Post methods
 
   //HELPERS
   createRandomName() {
-    let result = "";
+    let result = "guest_";
     const nameLength = 8;
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     for (let i = 0; i < nameLength; i++) {

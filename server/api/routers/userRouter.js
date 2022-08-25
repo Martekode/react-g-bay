@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const errorHandler = require("../helpers/errorHandler");
+const validator = require("../helpers/validator");
 const user = require("../models/user");
 //BASE PATH - DEV INDICATOR
 router.get("/", (_request, response) => {
@@ -33,7 +34,7 @@ router.get("/email/:email", async (request, response) => {
   try {
     const result = await user.getUserByEmail(request.params.email);
     if (!result.length) {
-      throw new Error("BadEmail");
+      throw new Error("EmailNotFound");
     }
     if (result.length > 1) {
       throw new Error("TooManyUsers");
@@ -99,23 +100,24 @@ Here we define all Post methods
 router.post("/new", async (request, response) => {
   try {
     const { username, email, image_url } = request.body;
-    let imageurl;
     if (!(username && email)) {
       throw new Error("undefined");
     }
-    if (image_url) {
-      imageurl = image_url;
+    if (!validator.validateEmail(email)) {
+      throw new Error("BadEmail");
     }
-    // //Check if username exists - REDUNDANT
-    // const nameCheck = await user.getUserByName(username);
-    // if (nameCheck.length) {
-    //   throw new Error("nameAlreadyInDB");
-    // }
+    const imgUrlIsValid = await validator.validateImageUrl(image_url);
+    let validImageUrl = "";
+    if (!imgUrlIsValid) {
+      validImageUrl = validator.getDefaultImage();
+    } else {
+      validImageUrl = image_url;
+    }
     const emailCheck = await user.getUserByEmail(email);
     if (emailCheck.length) {
       throw new Error("mailAlreadyInDB");
     }
-    const result = await user.createNewUser(username, email, imageurl);
+    const result = await user.createNewUser(username, email, validImageUrl);
     response.status(200).json({
       "AddedUserId:": result.insertId.toString(),
     });
@@ -126,7 +128,7 @@ router.post("/new", async (request, response) => {
 });
 router.post("/newbyemail", async (request, response) => {
   try {
-    const { email } = request.body;
+    const { email, image_url } = request.body;
     if (!email) {
       throw new Error("undefined");
     }
@@ -134,7 +136,14 @@ router.post("/newbyemail", async (request, response) => {
     if (emailCheck.length) {
       throw new Error("mailAlreadyInDB");
     }
-    const result = await user.createNewUserEmailOnly(email);
+    const imgUrlIsValid = await validator.validateImageUrl(image_url);
+    let validImageUrl = "";
+    if (!imgUrlIsValid) {
+      validImageUrl = validator.getDefaultImage();
+    } else {
+      validImageUrl = image_url;
+    }
+    const result = await user.createNewUserEmailOnly(email, validImageUrl);
     response.status(200).json({
       AddedUserId: result.insertId.toString(),
     });
@@ -162,11 +171,6 @@ router.put("/update/name", async (request, response) => {
     if (!checkValidID.length) {
       throw new Error("BadId");
     }
-    //Redundant
-    // const checkForName = await user.getUserByName(newname);
-    // if (checkForName.length) {
-    //   throw new Error("nameAlreadyInDB");
-    // }
     const result = await user.updateUserName(userid, newname);
     if (!result.affectedRows) {
       throw new Error("UpdateError");
@@ -188,7 +192,7 @@ router.put("/update/bymail/name", async (request, response) => {
     }
     const checkValidEmail = await user.getUserByEmail(email);
     if (!checkValidEmail.length) {
-      throw new Error("BadEmail");
+      throw new Error("EmailNotFound");
     }
     const result = await user.updateUserByMailName(email, newname);
     if (!result.affectedRows) {

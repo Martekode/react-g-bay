@@ -255,15 +255,10 @@ This endpoint returns the newly created user ID and the complete user object in 
 {
     "username":"Example",
     "email":"example@email.com",
-    "image_url":"this.url.is.optional.png"
+    "image_url":"IF_THIS_URL_IS_NOT_VALID_I_WILL_GET_DEFAULT_IMAGE"
 }
 ```
-- Also Valid:
-```json
-{
-    "username":"Example",
-    "email":"example@email.com",
-}
+**!!!REQUESTS WITHOUT IMAGE_URL WILL RESOLVE TO A DEFAULT IMAGE!!!**
 ```
 - Example of a response:
 ```json
@@ -273,7 +268,7 @@ This endpoint returns the newly created user ID and the complete user object in 
         "id": 32,
         "name": "Example",
         "email": "example@email.com",
-        "image_url": "this.url.is.optional.png"
+        "image_url": "IF THIS IS NO VALID URL YOU WILL GET DEFAULT IMAGING"
     }
 }
 ```
@@ -308,7 +303,7 @@ This endpoint returns the newly created user ID and the complete user object in 
         "id": 33,
         "name": "VVXIKEHP",
         "email": "example@emfail.com",
-        "image_url": ""
+        "image_url": "default_image"
     }
 }
 ```

@@ -75,6 +75,9 @@ class ErrorHandler {
         );
       }
       case "BadEmail": {
+        return this.createConsumerError("That Email is not valid!", error);
+      }
+      case "EmailNotFound": {
         return this.createConsumerError(
           "No User found that matches that email adress in the database!",
           error
