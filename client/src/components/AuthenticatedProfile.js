@@ -27,7 +27,7 @@ export default function AuthenticatedProfile() {
     }
 
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (isAuthenticated) {
             refactorUser(user)
         }
         console.log(data);
