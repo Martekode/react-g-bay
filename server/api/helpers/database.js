@@ -24,6 +24,13 @@ pool.getConnection((error, connection) => {
       case "ECONNREFUSED":
         console.error("DB HAS REFUSED CONNECTION");
         break;
+      case "ER_GET_CONNECTION_TIMEOUT":
+        console.error("NO CONNECTION TO DATABASE");
+        console.error("MAKE SURE YOU HAVE A REACHABLE MARIADB DATABASE");
+        console.error(
+          "CHECK YOUR .ENV FILE AND TEST YOUR CONNECTION WITH GIVEN CREDENTIALS"
+        );
+        break;
     }
   }
   if (connection) {

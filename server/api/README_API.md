@@ -87,6 +87,7 @@ Returns all categories currently available in the product database
 /api/product/categories
 ```
 ### POST
+#### Add a product with Owner-ID
 Adding a new product can be done trough a POST request on the following endpoint
 ```js
 /api/product/new
@@ -95,26 +96,31 @@ The request will only be accepted if it contains a body with:
 ```json
 "ownerId","name","price","description","imageUrl","category"
 ```
+The category can only be one of following string values: On any other value the product wil not be added to the database and you will receive an error (this check is not case sensitive as any entered value will be transformed to a lower case string)
+```js
+['cards', 'miniatures', 'gaming', 'anime', 'boardgames', 'comics', 'dungeons and dragons', 'other']
+```
 Example of a valid and accepted body at this endpoint:
 ```json
 {
-    "ownerId":"4",
-    "name":"exampleProduct",
-    "price":"5.5",
-    "description":"This is an exampleproduct, Look! The price can be a decimal",
-    "imageUrl":"https://www.example.io/image.webp",
-    "category":"Examples"
+    "owner_id":"4",
+    "name":"Michael's Childhood Toy Collection",
+    "price":"90",
+    "description":"Epic toys bruf",
+    "image_url":"myimage.webp",
+    "category":"Toys"
 }
 ```
 **EXTRA**
 - The API will respond with a json object containing:
     - The Added product's ID
     - The total Added product as it is stored in the database
+!!!! THE PRODUCT RETURNED HERE WILL BE REMOVED IN PRODUCTION DO NOT RELY ON THIS AS THIS REQUIRES MULTIPLE FETCHES SERVER SIDE EVEN IF ITS NOT USED
 Example:
 ```json
 {
-    "Added product id:": "47",
-    "Added product: ": {
+    "AddedProductId:": "47",
+    "AddedProduct: ": {
         "id": 47,
         "owner_id": 1,
         "name": "tesdddsdftio",
@@ -125,24 +131,213 @@ Example:
     }
 }
 ```
-**KNOWN ERRORS- W.I.P**
-- Currently Any Category will be accepted, since the set of useable categories has not been defined yet.
-- Currently specifying the ID of a non existant used will return a server error - since the user endpoint is still in development
+#### ADD a product using user email as identifier!
+Just like above you can add a new product, but avoid fetching the user's ID in case you don't have it already by just using the user's email.
+- Endpoint:
+```js
+/api/product/newbyemail
+```
+- Expected body consists of the same as above but instead you will supply an email instead of the owner_id
+- Example of an accepted body:
+```json
+{
+    "email":"Brian@gbay.org",
+    "name":"Product added using email as user identifier",
+    "price":900,
+    "description":"This query broke my brain, but it works.",
+    "image_url":"https://c.tenor.com/w-PCA2wkMQEAAAAM/mind-blown-shocked.gif",
+    "category":"other"
+}
+```
+- In the response you will receive the ID of the newly added product in case you need it!
+```json
+{
+    "AddedProductId": "72"
+}
+```
+#### Get all products for a user by User Email
+This endpoint accepts an email and returns all the products for the user associated with that email. (If you want to keep the user's email private we suggest using this endpoint to make this request instead of passing it trough a url) - Tough this may be slower than the Get method(WIP)
+```js
+/api/product/all/owner/email
+```
 
-~~**!IMPORTANT!**~~
-~~Extra: This request's response will always provide you with the ID of the newly added product.~~
+- This endpoint expects you to provide an email
+- If the email is not found in the database you will not be provided an error since this is not possible without overloading the database. It will return an empty array tough
+    - If you want to check if an email exists you can use one of the User endpoints
 
+- Example of the expected Body for this endpoint in JSON!
+```json
+{
+    "email":"Michael@gbay.org"
+}
+```
+- Example of the response you can get when using this endpoint:
+```json
+[
+    {
+        "id": 4,
+        "owner_id": 3,
+        "name": "Strawberry",
+        "price": "2",
+        "description": "Fresh Strawberry",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Aardbei_Karina.jpg?uselang=nl",
+        "category": "Fruit"
+    },
+    {
+        "id": 32,
+        "owner_id": 3,
+        "name": "tessdftio",
+        "price": "586",
+        "description": "OverffffRated",
+        "image_url": "https://assets.pokemon.com/assets/cms2/img/lalaland.png",
+        "category": "APItest"
+    }
+]
+```
 ### DELETE
-
 Deleting a product from the database
 #### Delete a product by ID
 Currently the API only supports deleting products by ID.
 
 ```js
-/api/delete/:id
+/api/product/delete/:id
 ```
 On success the API will return the deleted product to you in JSON format. The product will no longer be available in the database. This action can not be reversed.
 
 ~~On success this endpoint will respond with a JSON stringified version of the deleted object. You can use JSON.parse(string) on the string to restructure the JSON object on receival. This product is permanently deleted from the database and can not be restored!~~
 ***
+## USERS
+### GET
+#### Get User by ID
+This getter allows you to retrieve a user object by the user's ID and will return a userobject with it's ID, name, Email, imag_url
+```js
+/api/user/id/:id
+```
+- Example response:
+```json
+{
+    "id": 11,
+    "name": "teffsffsft",
+    "email": "tesfstd@teffst.com",
+    "image_url": "ww.image.png"
+}
+```
+#### Get User by Email
+This getter allows you to retrieve a user object by the user's Email and will return a user object just like when retrieving it trough ID
+```js
+/api/user/email/:email
+```
+#### Get all usernames
+This getter will return an array with all usernames currently in the database(Adding the userID here is not hard. if it's usefull please do let us know!)
+```js
+/api/user/name/all
+```
+#### Get BOOLEAN - Does this username exist in the database ? 
+This getter returns true/false depending if the given username exists in the database
+```js
+/api/user/name/check/:name
+```
+#### Get BOOLEAN - Does this email exist in the database ? 
+This getter returns true/false depending if the given email exists in the database
+```js
+/api/user/email/check/:email
+```
+### POST
+#### Create a new User
+Here you can create a new user, this endpoint expects a body with a username,email and image_url. The image_url is optional!. 
+```
+/api/user/api/new
+```
+This endpoint returns the newly created user ID and the complete user object in the db
+- Example of expected body:
+```json
+{
+    "username":"Example",
+    "email":"example@email.com",
+    "image_url":"this.url.is.optional.png"
+}
+```
+- Also Valid:
+```json
+{
+    "username":"Example",
+    "email":"example@email.com",
+}
+```
+- Example of a response:
+```json
+{
+    "DbId:": "32",
+    "UserObject:": {
+        "id": 32,
+        "name": "Example",
+        "email": "example@email.com",
+        "image_url": "this.url.is.optional.png"
+    }
+}
+```
+- Note: EMAIL = Unique in our database. if with any method to create a new user an email already exists you will be greeted with an error. As usual the first value of this error will be the Error boolean, set to true for easier handling.
+- Example of Error:
+```json
+{
+    "Error": true,
+    "Message from DevTeam: ": "This Email already exists in the database",
+    "Error Message:": "mailAlreadyInDB",
+    "Error:": "Error: mailAlreadyInDB"
+}
+```
+
+#### Create a new user by just an email
+This endpoint accepts an email and creates a new user just based on the email. IF the email does not exist! The username will be a randomly generated string, the user's picture will be empty
+```js
+/api/user/newbyemail
+```
+This endpoint returns the newly created user ID and the complete user object in the db
+- Example of expected body:
+```json
+{
+    "email":"example@email.com"
+}
+```
+- Example of what you may receive when creating a user like this
+```json
+{
+    "DbId:": "33",
+    "UserObject:": {
+        "id": 33,
+        "name": "VVXIKEHP",
+        "email": "example@emfail.com",
+        "image_url": ""
+    }
+}
+```
+### PUT
+#### Update by ID
+This endpoint will allow you to change a user's name by providing the userid and the newname 
+```js
+/api/user/update/name
+```
+this endpoint returns the updated user object
+- Example of expected body:
+```json
+{
+    "userid":"5",
+    "newname":"Example"
+}
+```
+#### Update by Email
+This endpoiunt will allow you to change a user's name by proviiding the user's email and the new name
+```js
+/api/user/update/bymail/name
+```
+It wil return the updated user object to you
+- Example of expected body:
+```json
+{
+    "email":"example@email.com",
+    "newname":"Example"
+}
+```
+
+### DELETE
 **Happy Coding!**
