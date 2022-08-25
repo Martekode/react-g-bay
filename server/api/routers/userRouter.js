@@ -116,10 +116,8 @@ router.post("/new", async (request, response) => {
       throw new Error("mailAlreadyInDB");
     }
     const result = await user.createNewUser(username, email, imageurl);
-    const responseUser = await user.getUserByID(result.insertId.toString());
     response.status(200).json({
-      "DbId:": result.insertId.toString(),
-      "UserObject:": responseUser[0],
+      "AddedUserId:": result.insertId.toString(),
     });
   } catch (error) {
     const handledError = errorHandler.handleUserError(error);
@@ -137,13 +135,8 @@ router.post("/newbyemail", async (request, response) => {
       throw new Error("mailAlreadyInDB");
     }
     const result = await user.createNewUserEmailOnly(email);
-    if (!result) {
-      throw new Error("Banana");
-    }
-    const responseUser = await user.getUserByID(result.insertId.toString());
     response.status(200).json({
-      "DbId:": result.insertId.toString(),
-      "UserObject:": responseUser[0],
+      AddedUserId: result.insertId.toString(),
     });
   } catch (error) {
     const handledError = errorHandler.handleUserError(error);
