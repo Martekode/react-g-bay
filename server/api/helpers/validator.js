@@ -30,11 +30,12 @@ class Validator {
         return false;
       }
     } catch (err) {
-      //TODO:: THROW TO SCOPE
       throw new Error("server", { cause: error });
     }
   }
-
+  getValidCategories() {
+    return this.VALID_CATEGORIES;
+  }
   async validateImageUrl(url) {
     try {
       if (!this.checkForImageFile(url)) {
