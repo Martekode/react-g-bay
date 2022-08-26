@@ -78,13 +78,18 @@ router.get("/name/check/:name", async (request, response) => {
 //SEE IF EMAIL EXISTS - RETURNS TRUE/FALSE DEPENDING IF EMAIL EXISTS
 router.get("/email/check/:email", async (request, response) => {
   try {
-    const result = await user.getUserByEmail(request.params.email);
+    const { email } = request.body.email;
+    if (!email) {
+      throw new Error("undefined");
+    }
+    const result = await user.getUserByEmail(email);
     if (!result.length) {
-      response.status(200).send(false);
+      throw new Error("EmailNotFound");
     }
-    if (result.length) {
-      response.status(200).send(true);
+    if (result.length > 1) {
+      throw new Error("TooManyUsers");
     }
+    response.status(200).json(result);
   } catch (error) {
     const handledError = errorHandler.handleUserError(error);
     response.status(handledError.status).json(handledError.message);
@@ -150,6 +155,31 @@ router.post("/newbyemail", async (request, response) => {
   } catch (error) {
     const handledError = errorHandler.handleUserError(error);
     response.status(handledError.status).json(handledError.message);
+  }
+});
+//POST METHOD TO SEE IF EMAIL EXISTS
+router.post("/check/email", async (req, res) => {
+  try {
+    const { email } = req.body;
+    console.log(email);
+    if (!email) {
+      throw new Error("undefined");
+    }
+    const result = await user.getUserByEmail(email).catch((err) => {
+      throw new Error("server", { cause: err });
+    });
+    console.log(result.length);
+    if (!result.length) {
+      res.status(200).send(false);
+      return;
+    }
+    if (result.length > 1) {
+      throw new Error("TooManyUsers");
+    }
+    res.status(200).send(true);
+  } catch (error) {
+    const handledError = errorHandler.handleUserError(error);
+    res.status(handledError.status).json(handledError.message);
   }
 });
 /*

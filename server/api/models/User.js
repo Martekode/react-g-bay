@@ -20,7 +20,7 @@ class User {
   }
   async getUserByEmail(email) {
     const query =
-      "SELECT id,name,email,image_url FROM user_table WHERE email = ?";
+      "SELECT id,name,email,image_url FROM user_table WHERE email LIKE ?";
     return this.pool.query(query, email);
   }
   async getUserByName(name) {
