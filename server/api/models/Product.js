@@ -3,9 +3,6 @@ class Product {
   constructor() {
     this.pool = pool;
   }
-  getAllowedCategories() {
-    return this.allowedCategories;
-  }
   /*
   __  ___  ___ 
  / _|| __||_ _|
@@ -26,11 +23,11 @@ class Product {
     return this.pool.query(query);
   }
   async getProductsByName(name) {
-    const query = "SELECT * FROM product_table WHERE name = ?";
+    const query = "SELECT * FROM product_table WHERE name LIKE ?";
     return this.pool.query(query, [name]);
   }
   async getProductsByCategory(category) {
-    const query = "SELECT * FROM product_table WHERE category = ?";
+    const query = "SELECT * FROM product_table WHERE category LIKE ?";
     return this.pool.query(query, [category]);
   }
   async getAllProductsByOwnerId(id) {
@@ -39,7 +36,7 @@ class Product {
   }
   async getAllProductsByOwnerEmail(email) {
     const query =
-      "SELECT product_table.id,product_table.owner_id,product_table.name,product_table.price,product_table.description,product_table.image_url,product_table.category FROM product_table LEFT JOIN user_table on product_table.owner_id = user_table.id WHERE email = ?;";
+      "SELECT product_table.id,product_table.owner_id,product_table.name,product_table.price,product_table.description,product_table.image_url,product_table.category FROM product_table LEFT JOIN user_table on product_table.owner_id = user_table.id WHERE email LIKE ?;";
     return this.pool.query(query, [email]);
   }
 
