@@ -14,14 +14,29 @@ import Gaming from "./pages/Gaming";
 import Other from "./pages/Other";
 import Anime from "./pages/Anime";
 import Boardgames from "./pages/Boardgames";
+import {
+    RecoilRoot,
+    atom,
+    selector,
+    useRecoilState,
+    useRecoilValue,
+} from 'recoil';
+
+export const checkoutArrayState = atom({
+    key: 'checkoutArray',
+    default: [],
+});
+
 
 function App() {
-    let checkoutArray = [];
 
-    const setArray = (value) => {
-        checkoutArray.push(value)
-        console.log(checkoutArray);
-    };
+
+    // let checkoutArray = [];
+    //
+    // const setArray = (value) => {
+    //     checkoutArray.push(value)
+    //     console.log(checkoutArray);
+    // };
 
     // axios.get('http://localhost:3050/api/product/id/5')
     //     .then(res => console.log(res.data))
@@ -42,7 +57,7 @@ function App() {
             <Route path="/sell" element={<Sellpage />} />
         </Routes>
         <Routes>
-            <Route path="/card" element={<Card setArray={setArray} />} />
+            <Route path="/card" element={<Card />} />
         </Routes>
         <Routes>
             <Route path="/dungeons" element={<Dungeons />} />

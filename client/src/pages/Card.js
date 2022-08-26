@@ -1,8 +1,20 @@
 import React, {useState, useEffect} from "react";
 import {GrAdd} from "react-icons/gr";
+import {useSetRecoilState, useRecoilValue} from 'recoil';
+import {checkoutArrayState} from "../App";
 
-const Card = ({setArray}) => {
 
+
+function Card () {
+
+    const setCheckoutArray = useSetRecoilState(checkoutArrayState);
+    const CheckoutArrayValue = useRecoilValue(checkoutArrayState);
+
+    const addItem = (e) => {
+        setCheckoutArray((checkoutArrayState) => [...checkoutArrayState,
+            e.target.value ])
+        console.log(CheckoutArrayValue);
+    }
 
     const [products, setProducts] = useState ([]);
     const [test, setTest] = useState([]);
@@ -20,9 +32,9 @@ const Card = ({setArray}) => {
         getCategoryData();
     },[])
 
-    function addItem (e) {
-        setArray(e.target.value)
-    }
+    // function addItem (e) {
+    //     setArray(e.target.value)
+    // }
 
 
 
