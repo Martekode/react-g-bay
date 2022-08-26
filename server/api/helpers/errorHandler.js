@@ -25,6 +25,12 @@ class ErrorHandler {
           error
         );
       }
+      case "BadImage": {
+        return this.createConsumerError(
+          "That image is not Valid! It is either not online, or not an image",
+          error
+        );
+      }
       case "NoDelete": {
         return this.createConsumerError(
           "No Product was deleted from the database.",
@@ -57,7 +63,7 @@ class ErrorHandler {
         );
       }
       default:
-        return this.createServerError(error, "Undefined Error");
+        return this.createServerError("Undefined Error", error);
     }
   }
   handleUserError(error) {
