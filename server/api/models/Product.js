@@ -1,21 +1,7 @@
 const pool = require("../helpers/database");
 class Product {
-  //Cards,Miniatures,Gaming,Anime,Boardgames,Comics,D&D,Other
-  allowedCategories = [
-    "cards",
-    "miniatures",
-    "gaming",
-    "anime",
-    "boardgames",
-    "comics",
-    "dungeons and dragons",
-    "other",
-  ];
   constructor() {
     this.pool = pool;
-  }
-  getAllowedCategories() {
-    return this.allowedCategories;
   }
   /*
   __  ___  ___ 
@@ -37,11 +23,11 @@ class Product {
     return this.pool.query(query);
   }
   async getProductsByName(name) {
-    const query = "SELECT * FROM product_table WHERE name = ?";
+    const query = "SELECT * FROM product_table WHERE name LIKE ?";
     return this.pool.query(query, [name]);
   }
   async getProductsByCategory(category) {
-    const query = "SELECT * FROM product_table WHERE category = ?";
+    const query = "SELECT * FROM product_table WHERE category LIKE ?";
     return this.pool.query(query, [category]);
   }
   async getAllProductsByOwnerId(id) {
@@ -50,7 +36,7 @@ class Product {
   }
   async getAllProductsByOwnerEmail(email) {
     const query =
-      "SELECT product_table.id,product_table.owner_id,product_table.name,product_table.price,product_table.description,product_table.image_url,product_table.category FROM product_table LEFT JOIN user_table on product_table.owner_id = user_table.id WHERE email = ?;";
+      "SELECT product_table.id,product_table.owner_id,product_table.name,product_table.price,product_table.description,product_table.image_url,product_table.category FROM product_table LEFT JOIN user_table on product_table.owner_id = user_table.id WHERE email LIKE ?;";
     return this.pool.query(query, [email]);
   }
 
@@ -83,14 +69,27 @@ Here we define all Post methods
   ) {
     const query =
       "INSERT INTO product_table(owner_id,name,price,description,image_url,category) VALUES((SELECT id FROM user_table WHERE email = ? ),?,?,?,?,?)";
-    return this.pool.query(query, [
-      email,
-      name,
-      price,
-      description,
-      imageUrl,
-      category,
-    ]);
+    return this.pool
+      .query(query, [email, name, price, description, imageUrl, category])
+      .catch((error) => {
+        if (error.text === `Column 'owner_id' cannot be null`) {
+          throw new Error("BadEmail");
+        } else {
+          throw new Error("server", { cause: error });
+        }
+      });
+  }
+  /*
+ _     ____  ____  ____  _____  _____
+/ \ /\/  __\/  _ \/  _ \/__ __\/  __/
+| | |||  \/|| | \|| / \|  / \  |  \  
+| \_/||  __/| |_/|| |-||  | |  |  /_ 
+\____/\_/   \____/\_/ \|  \_/  \____\
+     
+*/
+  async updateImage(id, imageUrl) {
+    const query = "UPDATE product_table SET image_url = ? WHERE id = ?";
+    return this.pool.query(query, [imageUrl, id]);
   }
 
   /*
@@ -106,22 +105,6 @@ Here we define all Post methods
   async deleteProductById(id) {
     const query = "DELETE FROM product_table WHERE id = ?";
     return this.pool.query(query, [id]);
-  }
-  validateCategory(category) {
-    let validated = "";
-    let valid = false;
-    this.allowedCategories.forEach((allowedCategory) => {
-      if (valid) return;
-      if (allowedCategory === category) {
-        validated = category;
-        valid = true;
-      }
-    });
-    if (valid) {
-      return validated;
-    } else {
-      return false;
-    }
   }
 }
 const product = new Product();
