@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useRecoilValue} from "recoil";
 import {checkoutArrayState} from "../App";
 import axios from "axios";
@@ -7,7 +7,7 @@ function Checkout() {
     const [totalPrice, setTotalPrice] = useState(0)
     const priceArray = [];
     const CheckoutArrayValue = useRecoilValue(checkoutArrayState);
-
+    const urlForSingleSale = 'http://localhost:3050/api/product/sale'
 
     CheckoutArrayValue.forEach((value) => {
         console.table(value);
@@ -18,13 +18,29 @@ function Checkout() {
         const product = JSON.parse(e.target.value);
         console.log('Chosen product: ');
         console.table(product)
-        const productId = product.id;
+        const productID = product.id;
         const ownerID = product.owner_id;
         console.log('product Information: ');
-        console.log(productId);
+        console.log(productID);
         console.log(ownerID);
+
+        const saleInfo = {
+            ownerID: ownerID,
+            buyerID: 5,
+            productID:productID
+        }
+        concludeSaleforSingleProduct(saleInfo)
     }
 
+    function concludeSaleforSingleProduct (saleInfo) {
+        axios.post(urlForSingleSale, {
+            seller_Id:saleInfo.ownerID,
+            buyer_Id:saleInfo.buyerID,
+            product_Id:saleInfo.productID
+        }).then(res => {
+            console.log(res.data)
+        })
+    }
 
 
 
