@@ -10,6 +10,7 @@ const errorHandler = require("../helpers/errorHandler");
 const validator = require("../helpers/validator");
 const sendBoughtMail = require("../helpers/mailForBuyer");
 const sendSoldMail = require("../helpers/mailForSeller");
+const { restart } = require("nodemon");
 //BASE PATH - DEV INDICATOR
 //We use this to make sure our router works :D
 router.get("/", (_request, response) => {
@@ -208,6 +209,40 @@ router.post("/all/owner/email", async (request, response) => {
   } catch (error) {
     const handledError = errorHandler.handleProductError(error);
     response.status(handledError.status).json(handledError.message);
+  }
+});
+//UPDATE PRODUCT IMAGE BY ID
+router.post("/update/byid/image", async (req, res) => {
+  try {
+    const { productid, image_url } = req.body;
+    if (!(productid, image_url)) {
+      throw new Error("undefined");
+    }
+    const isImageValid = await validator
+      .validateImageUrl(image_url)
+      .catch((err) => {
+        throw new Error("server", { cause: err });
+      });
+    if (!isImageValid) {
+      throw new Error("BadImage");
+    }
+    const result = await product
+      .updateImage(productid, image_url)
+      .catch((err) => {
+        throw new Error("server", { cause: err });
+      });
+    const updatedProduct = await product
+      .getProductById(productid)
+      .catch((err) => {
+        throw new Error("server", { cause: err });
+      });
+    if (!result.affectedRows) {
+      throw new Error("BadId");
+    }
+    res.status(200).json(updatedProduct[0]);
+  } catch (err) {
+    const handledError = errorHandler.handleProductError(err);
+    res.status(handledError.status).json(handledError.message);
   }
 });
 /*
