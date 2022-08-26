@@ -154,6 +154,7 @@ Just like above you can add a new product, but avoid fetching the user's ID in c
 {
     "AddedProductId": "72"
 }
+- If the email does not exist you  will get an error telling you you provided a bad email, if you get another error please let us know!
 ```
 #### Get all products for a user by User Email
 This endpoint accepts an email and returns all the products for the user associated with that email. (If you want to keep the user's email private we suggest using this endpoint to make this request instead of passing it trough a url) - Tough this may be slower than the Get method(WIP)
@@ -246,7 +247,7 @@ This getter returns true/false depending if the given email exists in the databa
 #### Create a new User
 Here you can create a new user, this endpoint expects a body with a username,email and image_url. The image_url is optional!. 
 ```
-/api/user/api/new
+/api/user/new
 ```
 This endpoint returns the newly created user ID and the complete user object in the db
 - Example of expected body:
@@ -254,15 +255,10 @@ This endpoint returns the newly created user ID and the complete user object in 
 {
     "username":"Example",
     "email":"example@email.com",
-    "image_url":"this.url.is.optional.png"
+    "image_url":"IF_THIS_URL_IS_NOT_VALID_I_WILL_GET_DEFAULT_IMAGE"
 }
 ```
-- Also Valid:
-```json
-{
-    "username":"Example",
-    "email":"example@email.com",
-}
+**!!!REQUESTS WITHOUT IMAGE_URL WILL RESOLVE TO A DEFAULT IMAGE!!!**
 ```
 - Example of a response:
 ```json
@@ -272,7 +268,7 @@ This endpoint returns the newly created user ID and the complete user object in 
         "id": 32,
         "name": "Example",
         "email": "example@email.com",
-        "image_url": "this.url.is.optional.png"
+        "image_url": "IF THIS IS NO VALID URL YOU WILL GET DEFAULT IMAGING"
     }
 }
 ```
@@ -307,15 +303,15 @@ This endpoint returns the newly created user ID and the complete user object in 
         "id": 33,
         "name": "VVXIKEHP",
         "email": "example@emfail.com",
-        "image_url": ""
+        "image_url": "default_image"
     }
 }
 ```
 ### PUT
-#### Update by ID
+#### Update username by ID
 This endpoint will allow you to change a user's name by providing the userid and the newname 
 ```js
-/api/user/update/name
+/api/user/update/byid/name
 ```
 this endpoint returns the updated user object
 - Example of expected body:
@@ -325,7 +321,7 @@ this endpoint returns the updated user object
     "newname":"Example"
 }
 ```
-#### Update by Email
+#### Update username by Email
 This endpoiunt will allow you to change a user's name by proviiding the user's email and the new name
 ```js
 /api/user/update/bymail/name
@@ -338,6 +334,74 @@ It wil return the updated user object to you
     "newname":"Example"
 }
 ```
+#### UPDATE USER IMAGE BY ID
+this endpoint allows you to change a user's image_url by providing the user's id and the new image url. This url still has to be valid!
+```js
+/api/user/update/byid/image
+```
+- Example of expected body: 
+```json
+{
+    "userid":"5",
+    "image_url":"https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg"
+}
+```
 
+#### UPDDATE USER IMAGE BY EMAIL
+This does the same as above but you can use the user's email
+```js
+/api/user/update/byid/image
+```
+- Example of expected body:
+```json
+{
+    "email":"test@test.com",
+    "image_url":"https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg"
+}
+```
+#### CONCLUDING A SALE
+this endpoint will conclude a sale, it expects the seller's id, product's id and buyer's id and will do a couple things in following steps:
+1. See if all id's are valid
+    - Maybe the product was just sold ? -> BadId error
+2. Send an email to the buyer confirming their order
+3. Send an email to the seller informing them their product was sold
+4. Remove the traded product from the database
+```js
+/api/product/sale
+```
+Since I couldn't find a way to actually send emails without a budget, I used a suggested online free service purposed for testing. if the customer would like to invest in a mailing system dependant on spoken scale it can be implemented
+    - Startign prices are affordable, but if the site scales prices go up quickly.
+- Example of expected body:
+```json
+{
+    "seller_Id":2,
+    "buyer_Id":1,
+    "product_Id":4
+}
+```
+In the response you will receive:
+```json
+{
+    "salecompleted": true,
+    "MailSentToBuyer": "https://ethereal.email/message/Ywf1IqO0.rMF3SjhYwf1IsVsBJHclD.XAAAAASHxVKO1Oc8JdEhxtKpB8Ls",
+    "MailSentToSeller": "https://ethereal.email/message/Ywf1IqO0.rMF3SjhYwf1I0R08nemO63RAAAAAqxANxCNWbu09ubXJL3v-b8",
+    "SoldProduct": {
+        "id": 75,
+        "owner_id": 4,
+        "name": "Product added using email as user identifier",
+        "price": "900",
+        "description": "This query broke my brain, but it works. Altough you might get SQL errors when providing a bad email!",
+        "image_url": "https://c.tenor.com/w-PCA2wkMQEAAAAM/mind-blown-shocked.gif",
+        "category": "other"
+    }
+}
+```
+- This product is destroyed when this request is completed, it will not be fetchable anymore once this request is made
+
+- The url's will show you the email that could be sent to the seller/buyer
+
+- This request takes a while, as it's pretty sketchy to send the emails :p
+
+###
 ### DELETE
 **Happy Coding!**

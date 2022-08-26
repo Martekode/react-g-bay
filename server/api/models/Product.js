@@ -1,16 +1,5 @@
 const pool = require("../helpers/database");
 class Product {
-  //Cards,Miniatures,Gaming,Anime,Boardgames,Comics,D&D,Other
-  allowedCategories = [
-    "cards",
-    "miniatures",
-    "gaming",
-    "anime",
-    "boardgames",
-    "comics",
-    "dungeons and dragons",
-    "other",
-  ];
   constructor() {
     this.pool = pool;
   }
@@ -83,16 +72,16 @@ Here we define all Post methods
   ) {
     const query =
       "INSERT INTO product_table(owner_id,name,price,description,image_url,category) VALUES((SELECT id FROM user_table WHERE email = ? ),?,?,?,?,?)";
-    return this.pool.query(query, [
-      email,
-      name,
-      price,
-      description,
-      imageUrl,
-      category,
-    ]);
+    return this.pool
+      .query(query, [email, name, price, description, imageUrl, category])
+      .catch((error) => {
+        if (error.text === `Column 'owner_id' cannot be null`) {
+          throw new Error("BadEmail");
+        } else {
+          throw new Error("server", { cause: error });
+        }
+      });
   }
-
   /*
  _(`-')    (`-')  _         (`-')  _(`-')      (`-')  _ 
 ( (OO ).-> ( OO).-/  <-.    ( OO).-/( OO).->   ( OO).-/ 
@@ -106,22 +95,6 @@ Here we define all Post methods
   async deleteProductById(id) {
     const query = "DELETE FROM product_table WHERE id = ?";
     return this.pool.query(query, [id]);
-  }
-  validateCategory(category) {
-    let validated = "";
-    let valid = false;
-    this.allowedCategories.forEach((allowedCategory) => {
-      if (valid) return;
-      if (allowedCategory === category) {
-        validated = category;
-        valid = true;
-      }
-    });
-    if (valid) {
-      return validated;
-    } else {
-      return false;
-    }
   }
 }
 const product = new Product();

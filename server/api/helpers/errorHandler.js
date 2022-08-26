@@ -1,3 +1,4 @@
+const e = require("express");
 const product = require("../models/Product");
 
 class ErrorHandler {
@@ -20,7 +21,7 @@ class ErrorHandler {
       }
       case "BadId": {
         return this.createConsumerError(
-          "No Product was found by this Id",
+          "Nothing in the database matched the given ID(s)",
           error
         );
       }
@@ -40,6 +41,18 @@ class ErrorHandler {
       case "BadEmail": {
         return this.createConsumerError(
           "There is no user in the database with that email!",
+          error
+        );
+      }
+      case "Mailer": {
+        return this.createServerError(
+          `Something went wrong with the server's mailing system`,
+          error
+        );
+      }
+      case "server": {
+        return this.createServerError(
+          "Something went wrong on the server, We are sorry!",
           error
         );
       }
@@ -67,7 +80,16 @@ class ErrorHandler {
           error
         );
       }
+      case "BadImage": {
+        return this.createConsumerError(
+          "That image is not Valid! It is either not online, or not an image",
+          error
+        );
+      }
       case "BadEmail": {
+        return this.createConsumerError("That Email is not valid!", error);
+      }
+      case "EmailNotFound": {
         return this.createConsumerError(
           "No User found that matches that email adress in the database!",
           error
@@ -94,13 +116,13 @@ class ErrorHandler {
       //INTERNAL SERVER ERRORS - QUERY WENT WRONG
       case "UpdateError": {
         return this.createServerError(
-          error,
-          "There was an error updating the Data in the database"
+          "There was an error updating the Data in the database",
+          error
         );
       }
 
       default:
-        return this.createServerError(error, "Undefined Error");
+        return this.createServerError("Undefined Error", error);
     }
   }
   createConsumerError(message, error) {
@@ -114,7 +136,25 @@ class ErrorHandler {
       },
     };
   }
-  createServerError(error, message) {
+  createServerError(message, error) {
+    if (error.cause) {
+      return {
+        status: 500,
+        message: {
+          Error: true,
+          "Message from DevTeam: ":
+            "Please provide following information when creating a support ticket.",
+          "Error Message: ": error.message,
+          "Error: ": error.toString(),
+          "Custom Message From DevTeam:": message,
+          error_information_for_backend: {
+            Errorname: error.cause.name,
+            Errortext: error.cause.text,
+            Errorcode: error.cause.code,
+          },
+        },
+      };
+    }
     return {
       status: 500,
       message: {

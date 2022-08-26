@@ -4,9 +4,12 @@ const express = require("express");
 const router = express.Router();
 //Get model
 const product = require("../models/Product");
+const user = require("../models/User");
 //Get Helpers
 const errorHandler = require("../helpers/errorHandler");
-const user = require("../models/user");
+const validator = require("../helpers/validator");
+const sendBoughtMail = require("../helpers/mailForBuyer");
+const sendSoldMail = require("../helpers/mailForSeller");
 //BASE PATH - DEV INDICATOR
 //We use this to make sure our router works :D
 router.get("/", (_request, response) => {
@@ -95,26 +98,23 @@ router.post("/new", async (request, response) => {
     if (!(owner_id && name && price && description && image_url && category)) {
       throw new Error("undefined");
     }
-    // const allowedCategories = product.getAllowedCategories();
-    // let validatedCategory = "";
-    // let categoryValid = false;
-    // allowedCategories.forEach((allowedCategory) => {
-    //   if (categoryValid) return;
-    //   if (allowedCategory === category) {
-    //     categoryValid = true;
-    //     validatedCategory = category;
-    //   }
-    // });
-    let validatedCategory = product.validateCategory(category);
+    let validatedCategory = validator.validateCategory(category);
     if (!validatedCategory) {
       throw new Error("BadCategory");
+    }
+    const imgUrlIsValid = await validator.validateImageUrl(image_url);
+    let validImageUrl = "";
+    if (!imgUrlIsValid) {
+      validImageUrl = validator.getDefaultImage();
+    } else {
+      validImageUrl = image_url;
     }
     const result = await product.addNewProduct(
       owner_id,
       name,
       price,
       description,
-      image_url,
+      validImageUrl,
       validatedCategory
     );
     const RawInsertedProductID = result.insertId.toString();
@@ -135,16 +135,23 @@ router.post("/newbyemail", async (request, response) => {
     if (!(email && name && price && description && image_url && category)) {
       throw new Error("undefined");
     }
-    let validCategory = product.validateCategory(category);
+    const validCategory = validator.validateCategory(category);
     if (!validCategory) {
       throw new Error("BadCategory");
+    }
+    const imgUrlIsValid = await validator.validateImageUrl(image_url);
+    let validImageUrl = "";
+    if (!imgUrlIsValid) {
+      validImageUrl = validator.getDefaultImage();
+    } else {
+      validImageUrl = image_url;
     }
     const result = await product.addNewProductByOwnerEmail(
       email,
       name,
       price,
       description,
-      image_url,
+      validImageUrl,
       category
     );
     response.status(200).json({ AddedProductId: result.insertId.toString() });
@@ -167,26 +174,6 @@ router.post("/all/owner/email", async (request, response) => {
     response.status(handledError.status).json(handledError.message);
   }
 });
-// This method works, but connects to the database twice! Time to change the query a bit and make it work connecting just once
-// router.post("/all/owner/email", async (request, response) => {
-//   try {
-//     const ownerEmail = request.body.email;
-//     if (!ownerEmail) {
-//       throw new Error("undefined");
-//     }
-//     const ownerIdObject = await user.getUserIdByEmail(ownerEmail);
-//     if (!ownerIdObject[0]) {
-//       throw new Error("BadEmail");
-//     }
-//     const ownerId = ownerIdObject[0].id;
-//     const result = await product.getAllProductsByOwnerId(ownerId);
-//     response.status(200).json(result);
-//   } catch (error) {
-//     const handledError = errorHandler.handleProductError(error);
-//     response.status(handledError.status).json(handledError.message);
-//   }
-// });
-
 /*
  _(`-')    (`-')  _         (`-')  _(`-')      (`-')  _ 
 ( (OO ).-> ( OO).-/  <-.    ( OO).-/( OO).->   ( OO).-/ 
@@ -219,28 +206,54 @@ router.delete("/delete/:id", async (request, response) => {
     response.status(handledError.status).json(handledError.message);
   }
 });
-module.exports = router;
 
-//!!!ADD MODEL TO HANDLE ERROR -> Takes error code -> Returns error message :: Does not interfer with HTTP
-//GET PRODUCT BY CATEGORY
-// router.get("/category/:category", async (request, response) => {
-//   try {
-//     if (!isNaN(request.params.category)) {
-//       throw new Error("Bad Input");
-//     }
-//     const query = "SELECT * FROM product_table WHERE category = ?";
-//     const result = await pool.query(query, [request.params.category]);
-//     response.status(200).json(result);
-//   } catch (error) {
-//     switch (error.message) {
-//       case "Bad Input":
-//         response
-//           .status(400)
-//           .json('Query must be of type: String -"Miss me yet ? x TypeScript"');
-//         break;
-//       default:
-//         response.status(500).send(error);
-//         break;
-//     }
-//   }
-// });
+//SALE
+router.post("/sale", async (request, response) => {
+  try {
+    const { seller_Id, buyer_Id, product_Id } = request.body;
+    if (!(seller_Id, buyer_Id, product_Id)) {
+      throw new Error("undefined");
+    }
+
+    const sellerFetch = await user.getUserByID(seller_Id);
+    if (!sellerFetch.length) {
+      throw new Error("BadId");
+    }
+    const seller = sellerFetch[0];
+    const buyerFetch = await user.getUserByID(buyer_Id);
+    if (!buyerFetch.length) {
+      throw new Error("BadId");
+    }
+    const buyer = buyerFetch[0];
+    const productFetch = await product.getProductById(product_Id);
+    if (!productFetch.length) {
+      throw new Error("BadId");
+    }
+    const tradedProduct = productFetch[0];
+    const mailToBuyer = await sendBoughtMail(
+      buyer,
+      seller,
+      tradedProduct
+    ).catch((err) => {
+      console.log(`Error in mail to buyer: ${err.message}`);
+      throw new Error("Mailer");
+    });
+    const mailToSeller = await sendSoldMail(buyer, seller, tradedProduct).catch(
+      (err) => {
+        console.log(`Error in mail to seller: ${err.message}`);
+        throw new Error("Mailer");
+      }
+    );
+    product.deleteProductById(tradedProduct.id);
+    response.status(200).json({
+      salecompleted: true,
+      MailSentToBuyer: mailToBuyer,
+      MailSentToSeller: mailToSeller,
+      SoldProduct: tradedProduct,
+    });
+  } catch (err) {
+    const handledError = errorHandler.handleProductError(err);
+    response.status(handledError.status).json(handledError.message);
+  }
+});
+module.exports = router;
