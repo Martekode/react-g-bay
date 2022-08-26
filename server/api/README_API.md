@@ -307,6 +307,18 @@ This endpoint returns the newly created user ID and the complete user object in 
     }
 }
 ```
+#### CHECK IF EMAIL EXISTS TROUGH POST - SAFER FOR USER INFORMATION
+this endpoint returns true/false based on wether the user exists in the database. make sure to have an email value in the body of your http POST request :) 
+```
+/api/user/check/email
+```
+- Example of expected body
+```json
+{
+    "email":"tdsdfest@test.com"
+}
+```
+***
 ### PUT
 #### Update username by ID
 This endpoint will allow you to change a user's name by providing the userid and the newname 
