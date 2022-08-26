@@ -26,11 +26,11 @@ DB_NAME=databasename
 This section contains general information about the API
 - RESPONSES:
     - All responses will have a JSON formatted body
-    - Unhandled get requests not caught by our errohandler will route you to the homepage of the app
+    - Unhandled get requests not caught by our errorHandler will route you to the homepage of the app
 - ERRORS:
     - If any error occurs. The api will return an errormessage. The first value of this error message will always be a boolean called _error_ set to true!
         - ERROR:400 Bad Request
-            - When enountering this error somethign went wrong in the request, usually more info will be provided in the response.
+            - When encountering this error something went wrong in the request, usually more info will be provided in the response.
             - If you would like another endpoint to suite your request's needs please feel free to contact us!
         - ERROR:500 Internal Server Error
             - There is an error on our end. We are sorry. please provide us with the error message sent in the response!
@@ -134,8 +134,8 @@ Example:
 }
 ```
 **KNOWN ERRORS- W.I.P**
-- Currently Any Category will be accepted, since the set of useable categories has not been defined yet.
-- Currently specifying the ID of a non existant used will return a server error - since the user endpoint is still in development
+- Currently Any Category will be accepted, since the set of usable categories has not been defined yet.
+- Currently specifying the ID of a non existent used will return a server error - since the user endpoint is still in development
 
 ~~**!IMPORTANT!**~~
 ~~Extra: This request's response will always provide you with the ID of the newly added product.~~
