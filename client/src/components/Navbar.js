@@ -1,10 +1,11 @@
-import React from 'react';
+import React from "react";
 import {Link} from "react-router-dom";
 import {CgProfile} from "react-icons/cg";
 import {BsSearch} from "react-icons/bs"
 import {IoHomeSharp} from "react-icons/io5"
 import {FaShoppingCart} from "react-icons/fa"
 import logo from "../images/blacklogo.png"
+
 //We can use a logo to import to go to the HomePage and for the Profile and Checkout
 const Navbar = () => {
     return (

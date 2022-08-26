@@ -15,7 +15,7 @@ function Checkout() {
     return (
         <div>
             <p className='flex justify-center items-center text-6xl mt-24 font-bangers'>Checkout</p>
-            <div className='flex flex-col items-center mt-12'>
+            <div className='flex flex-col items-center mt-12 font-bangers text-xl'>
                 <ul>
                     {productArray.map((product, i) => {
                         priceArray.push(product.price)
