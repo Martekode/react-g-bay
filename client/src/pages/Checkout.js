@@ -26,7 +26,7 @@ function Checkout() {
 
         const saleInfo = {
             ownerID: ownerID,
-            buyerID: 5,
+            buyerID: 3,
             productID:productID
         }
         concludeSaleforSingleProduct(saleInfo)
