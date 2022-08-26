@@ -20,7 +20,7 @@ router.get("/id/:id", async (request, response) => {
       throw new Error("NaN");
     }
     const result = await user.getUserByID(request.params.id).catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     if (!result.length) {
       throw new Error("BadId");
@@ -37,7 +37,7 @@ router.get("/email/:email", async (request, response) => {
     const result = await user
       .getUserByEmail(request.params.email)
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     if (!result.length) {
       throw new Error("EmailNotFound");
@@ -55,7 +55,7 @@ router.get("/email/:email", async (request, response) => {
 router.get("/name/all", async (_request, response) => {
   try {
     const result = await user.getAllNames().catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     response.status(200).json(result);
   } catch (error) {
@@ -69,7 +69,7 @@ router.get("/name/check/:name", async (request, response) => {
     const result = await user
       .getUserByName(request.params.name)
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     if (!result.length) {
       response.status(200).send(false);
@@ -95,7 +95,7 @@ router.get("/email/check/:email", async (request, response) => {
       throw new Error("undefined");
     }
     const result = await user.getUserByEmail(email).catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     if (!result.length) {
       throw new Error("EmailNotFound");
@@ -128,7 +128,7 @@ router.post("/new", async (request, response) => {
     const imgUrlIsValid = await validator
       .validateImageUrl(image_url)
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     let validImageUrl = "";
     if (!imgUrlIsValid) {
@@ -137,7 +137,7 @@ router.post("/new", async (request, response) => {
       validImageUrl = image_url;
     }
     const emailCheck = await user.getUserByEmail(email).catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     if (emailCheck.length) {
       throw new Error("mailAlreadyInDB");
@@ -158,7 +158,7 @@ router.post("/newbyemail", async (request, response) => {
       throw new Error("undefined");
     }
     const emailCheck = await user.getUserByEmail(email).catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     if (emailCheck.length) {
       throw new Error("mailAlreadyInDB");
@@ -166,7 +166,7 @@ router.post("/newbyemail", async (request, response) => {
     const imgUrlIsValid = await validator
       .validateImageUrl(image_url)
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     let validImageUrl = "";
     if (!imgUrlIsValid) {
@@ -177,7 +177,7 @@ router.post("/newbyemail", async (request, response) => {
     const result = await user
       .createNewUserEmailOnly(email, validImageUrl)
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     response.status(200).json({
       AddedUserId: result.insertId.toString(),
@@ -228,19 +228,19 @@ router.put("/update/byid/name", async (request, response) => {
       throw new Error("undefined");
     }
     const checkValidID = await user.getUserByID(userid).catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     if (!checkValidID.length) {
       throw new Error("BadId");
     }
     const result = await user.updateUserName(userid, newname).catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     if (!result.affectedRows) {
       throw new Error("UpdateError");
     }
     const updatedUser = await user.getUserByID(userid).catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     response.status(200).json(updatedUser[0]);
   } catch (error) {
@@ -256,7 +256,7 @@ router.put("/update/bymail/name", async (request, response) => {
       throw new Error("undefined");
     }
     const checkValidEmail = await user.getUserByEmail(email).catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     if (!checkValidEmail.length) {
       throw new Error("EmailNotFound");
@@ -264,13 +264,13 @@ router.put("/update/bymail/name", async (request, response) => {
     const result = await user
       .updateUserByMailName(email, newname)
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     if (!result.affectedRows) {
       throw new Error("UpdateError");
     }
     const updatedUser = await user.getUserByEmail(email).catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     response.status(200).json(updatedUser[0]);
   } catch (error) {
@@ -310,7 +310,7 @@ router.put("/update/bymail/image", async (req, res) => {
     const isImageValid = await validator
       .validateImageUrl(image_url)
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     if (!isImageValid) {
       throw new Error("BadImage");
@@ -318,13 +318,13 @@ router.put("/update/bymail/image", async (req, res) => {
     const result = await user
       .updateImageByMail(email, image_url)
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     if (!result.affectedRows) {
       throw new Error("BadEmail");
     }
     const updatedUser = await user.getUserByEmail(email).catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     res.status(200).json(updatedUser[0]);
   } catch (err) {
