@@ -83,6 +83,19 @@ Here we define all Post methods
       });
   }
   /*
+ _     ____  ____  ____  _____  _____
+/ \ /\/  __\/  _ \/  _ \/__ __\/  __/
+| | |||  \/|| | \|| / \|  / \  |  \  
+| \_/||  __/| |_/|| |-||  | |  |  /_ 
+\____/\_/   \____/\_/ \|  \_/  \____\
+     
+*/
+  async updateImage(id, imageUrl) {
+    const query = "UPDATE product_table SET image_url = ? WHERE id = ?";
+    return this.pool.query(query, [imageUrl, id]);
+  }
+
+  /*
  _(`-')    (`-')  _         (`-')  _(`-')      (`-')  _ 
 ( (OO ).-> ( OO).-/  <-.    ( OO).-/( OO).->   ( OO).-/ 
  \    .'_ (,------.,--. )  (,------./    '._  (,------. 
