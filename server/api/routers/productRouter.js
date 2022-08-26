@@ -7,6 +7,7 @@ const product = require("../models/Product");
 //Get Helpers
 const errorHandler = require("../helpers/errorHandler");
 const user = require("../models/User");
+const {request, response} = require("express");
 
 //BASE PATH - DEV INDICATOR
 //We use this to make sure our router works :D
@@ -83,7 +84,7 @@ router.get("/categories", async (_request, response) => {
     }
 });
 // get all products by owner id
-router.get("/owner/id/:id" , async (request, response) =>{
+router.get("/owner/id/:id", async (request, response) => {
     try {
         const userid = request.params.id;
         const checkValidID = await user.getUserByID(userid);
@@ -98,9 +99,9 @@ router.get("/owner/id/:id" , async (request, response) =>{
     }
 });
 // get all products by user email
-router.get("/all/owner/email/:email", async (request, response)=>{
+router.get("/all/owner/email/:email", async (request, response) => {
     try {
-        const result  = await product.getAllProductsByEmail(request.params.email);
+        const result = await product.getAllProductsByEmail(request.params.email);
         response.status(200).json(result);
     } catch (error) {
         const handleError = errorHandler.handleProductError(error);
@@ -122,7 +123,7 @@ Here we define all Post methods
 */
 router.post("/new", async (request, response) => {
     try {
-        const { owner_id, name, price, description, image_url, category } =
+        const {owner_id, name, price, description, image_url, category} =
             request.body;
         if (!(owner_id && name && price && description && image_url && category)) {
             throw new Error("undefined");
@@ -178,6 +179,39 @@ router.delete("/delete/:id", async (request, response) => {
         response.status(handledError.status).json(handledError.message);
     }
 });
+
+/*
+ _     ____  ____  ____  _____  _____
+/ \ /\/  __\/  _ \/  _ \/__ __\/  __/
+| | |||  \/|| | \|| / \|  / \  |  \
+| \_/||  __/| |_/|| |-||  | |  |  /_
+\____/\_/   \____/\_/ \|  \_/  \____\
+
+*/
+router.put("/update/name/:name", async (request, response) => {
+    try {
+        const { productID, newName } = request.body;
+        if(!(productID && newName)) {
+            throw new Error("undefined");
+        }
+        const checkValidId = await product.getProductById(productID);
+        if (!checkValidId.length){
+            throw new Error("badId")
+        }
+        const checkForName = await product.getProductsByName(newName);
+        if (checkForName.length) {
+            throw new Error("");
+        }
+        await product.updateProductName(productID, newName);
+        const updateProduct = await product.getProductById(productID);
+        response.status(200).json(updateProduct[0]);
+    } catch (error) {
+        const handleError = errorHandler.handleProductError(error);
+        response.status(handleError.status).json(handleError.message);
+    }
+    });
+
+
 module.exports = router;
 
 //!!!ADD MODEL TO HANDLE ERROR -> Takes error code -> Returns error message :: Does not interfere with HTTP
