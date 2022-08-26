@@ -25,7 +25,9 @@ router.get("/", (_request, response) => {
 //GET ALL PRODUCTS
 router.get("/all", async (_request, response) => {
   try {
-    const result = await product.getAllProducts();
+    const result = await product.getAllProducts().catch((err) => {
+      throw new Error("server", { causer: err });
+    });
     response.status(200).json(result);
   } catch (error) {
     const handledError = errorHandler.handleProductError(error);
@@ -38,7 +40,11 @@ router.get("/id/:id", async (request, response) => {
     if (isNaN(request.params.id)) {
       throw new Error("NaN");
     }
-    const result = await product.getProductById(request.params.id);
+    const result = await product
+      .getProductById(request.params.id)
+      .catch((err) => {
+        throw new Error("server", { causer: err });
+      });
     if (!result.length) {
       throw new Error("BadId");
     }
@@ -51,7 +57,11 @@ router.get("/id/:id", async (request, response) => {
 //GET PRODUCT BY NAME
 router.get("/name/:name", async (request, response) => {
   try {
-    const result = await product.getProductsByName(request.params.name);
+    const result = await product
+      .getProductsByName(request.params.name)
+      .catch((err) => {
+        throw new Error("server", { causer: err });
+      });
     if (!result.length) {
       throw new Error("No result");
     }
@@ -64,7 +74,11 @@ router.get("/name/:name", async (request, response) => {
 //GET PRODUCT BY CATEGORY
 router.get("/category/:category", async (request, response) => {
   try {
-    const result = await product.getProductsByCategory(request.params.category);
+    const result = await product
+      .getProductsByCategory(request.params.category)
+      .catch((err) => {
+        throw new Error("server", { causer: err });
+      });
     if (!result.length) {
       throw new Error("No result");
     }
@@ -77,7 +91,9 @@ router.get("/category/:category", async (request, response) => {
 //GET ALL CATEGORIES
 router.get("/categories", async (_request, response) => {
   try {
-    const result = await product.getAllCategories();
+    const result = await product.getAllCategories().catch((err) => {
+      throw new Error("server", { causer: err });
+    });
     response.status(200).json(result);
   } catch (error) {
     const handledError = errorHandler.handleProductError(error);
@@ -98,30 +114,40 @@ router.post("/new", async (request, response) => {
     if (!(owner_id && name && price && description && image_url && category)) {
       throw new Error("undefined");
     }
-    let validatedCategory = validator.validateCategory(category);
+    let validatedCategory = validator
+      .validateCategory(category)
+      .catch((err) => {
+        throw new Error("server", { causer: err });
+      });
     if (!validatedCategory) {
       throw new Error("BadCategory");
     }
-    const imgUrlIsValid = await validator.validateImageUrl(image_url);
+    const imgUrlIsValid = await validator
+      .validateImageUrl(image_url)
+      .catch((err) => {
+        throw new Error("server", { causer: err });
+      });
     let validImageUrl = "";
     if (!imgUrlIsValid) {
       validImageUrl = validator.getDefaultImage();
     } else {
       validImageUrl = image_url;
     }
-    const result = await product.addNewProduct(
-      owner_id,
-      name,
-      price,
-      description,
-      validImageUrl,
-      validatedCategory
-    );
+    const result = await product
+      .addNewProduct(
+        owner_id,
+        name,
+        price,
+        description,
+        validImageUrl,
+        validatedCategory
+      )
+      .catch((err) => {
+        throw new Error("server", { causer: err });
+      });
     const RawInsertedProductID = result.insertId.toString();
-    const insertedProduct = await product.getProductById(RawInsertedProductID);
     response.status(200).json({
       AddedProductId: RawInsertedProductID,
-      AddedProduct: insertedProduct[0],
     });
   } catch (error) {
     const handledError = errorHandler.handleProductError(error);
@@ -135,25 +161,35 @@ router.post("/newbyemail", async (request, response) => {
     if (!(email && name && price && description && image_url && category)) {
       throw new Error("undefined");
     }
-    const validCategory = validator.validateCategory(category);
+    const validCategory = validator.validateCategory(category).catch((err) => {
+      throw new Error("server", { causer: err });
+    });
     if (!validCategory) {
       throw new Error("BadCategory");
     }
-    const imgUrlIsValid = await validator.validateImageUrl(image_url);
+    const imgUrlIsValid = await validator
+      .validateImageUrl(image_url)
+      .catch((err) => {
+        throw new Error("server", { causer: err });
+      });
     let validImageUrl = "";
     if (!imgUrlIsValid) {
       validImageUrl = validator.getDefaultImage();
     } else {
       validImageUrl = image_url;
     }
-    const result = await product.addNewProductByOwnerEmail(
-      email,
-      name,
-      price,
-      description,
-      validImageUrl,
-      category
-    );
+    const result = await product
+      .addNewProductByOwnerEmail(
+        email,
+        name,
+        price,
+        description,
+        validImageUrl,
+        category
+      )
+      .catch((err) => {
+        throw new Error("server", { causer: err });
+      });
     response.status(200).json({ AddedProductId: result.insertId.toString() });
   } catch (err) {
     const e = errorHandler.handleProductError(err);
@@ -185,21 +221,20 @@ router.post("/all/owner/email", async (request, response) => {
  `------'  `------'`-----'  `------'   `--'    `------'
  */
 router.delete("/delete/:id", async (request, response) => {
-  //INSERT CODE HERE
   try {
-    const productToDelete = await product.getProductById(request.params.id);
     if (isNaN(request.params.id)) {
       throw new Error("NaN");
     }
-    if (!productToDelete) {
-      throw new Error("BadId");
-    }
-    const result = await product.deleteProductById(request.params.id);
+    const result = await product
+      .deleteProductById(request.params.id)
+      .catch((err) => {
+        throw new Error("server", { causer: err });
+      });
     if (!result.affectedRows) {
       throw new Error("BadId");
     }
     response.status(200).json({
-      "Deleted product:": productToDelete[0],
+      "ProductDeletionSuccess:": true,
     });
   } catch (error) {
     const handledError = errorHandler.handleProductError(error);
@@ -215,17 +250,25 @@ router.post("/sale", async (request, response) => {
       throw new Error("undefined");
     }
 
-    const sellerFetch = await user.getUserByID(seller_Id);
+    const sellerFetch = await user.getUserByID(seller_Id).catch((err) => {
+      throw new Error("server", { causer: err });
+    });
     if (!sellerFetch.length) {
       throw new Error("BadId");
     }
     const seller = sellerFetch[0];
-    const buyerFetch = await user.getUserByID(buyer_Id);
+    const buyerFetch = await user.getUserByID(buyer_Id).catch((err) => {
+      throw new Error("server", { causer: err });
+    });
     if (!buyerFetch.length) {
       throw new Error("BadId");
     }
     const buyer = buyerFetch[0];
-    const productFetch = await product.getProductById(product_Id);
+    const productFetch = await product
+      .getProductById(product_Id)
+      .catch((err) => {
+        throw new Error("server", { causer: err });
+      });
     if (!productFetch.length) {
       throw new Error("BadId");
     }
@@ -235,13 +278,11 @@ router.post("/sale", async (request, response) => {
       seller,
       tradedProduct
     ).catch((err) => {
-      console.log(`Error in mail to buyer: ${err.message}`);
-      throw new Error("Mailer");
+      throw new Error("server", { causer: err });
     });
     const mailToSeller = await sendSoldMail(buyer, seller, tradedProduct).catch(
       (err) => {
-        console.log(`Error in mail to seller: ${err.message}`);
-        throw new Error("Mailer");
+        throw new Error("server", { causer: err });
       }
     );
     product.deleteProductById(tradedProduct.id);

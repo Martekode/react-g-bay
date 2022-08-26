@@ -120,6 +120,12 @@ class ErrorHandler {
           error
         );
       }
+      case "server": {
+        return this.createServerError(
+          "Something went wrong on the server, We are sorry!",
+          error
+        );
+      }
 
       default:
         return this.createServerError("Undefined Error", error);
