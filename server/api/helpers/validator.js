@@ -57,11 +57,7 @@ class Validator {
     try {
       const res = await axios.get(url);
       const status = res.status;
-      if (status == 200) {
-        return true;
-      } else {
-        return false;
-      }
+      return status == 200;
     } catch (err) {
       return false;
     }

@@ -10,7 +10,6 @@ const errorHandler = require("../helpers/errorHandler");
 const validator = require("../helpers/validator");
 const sendBoughtMail = require("../helpers/mailForBuyer");
 const sendSoldMail = require("../helpers/mailForSeller");
-const { restart } = require("nodemon");
 //BASE PATH - DEV INDICATOR
 //We use this to make sure our router works :D
 router.get("/", (_request, response) => {
@@ -64,7 +63,7 @@ router.get("/name/:name", async (request, response) => {
         throw new Error("server", { cause: err });
       });
     if (!result.length) {
-      throw new Error("No result");
+      throw new Error("NoResult");
     }
     response.status(200).json(result);
   } catch (error) {
@@ -75,13 +74,20 @@ router.get("/name/:name", async (request, response) => {
 //GET PRODUCT BY CATEGORY
 router.get("/category/:category", async (request, response) => {
   try {
+    if (!request.params.category) {
+      throw new Error("undefined");
+    }
+    const isCategoryValid = validator.validateCategory(request.params.category);
+    if (!isCategoryValid) {
+      throw new Error("BadCategory");
+    }
     const result = await product
       .getProductsByCategory(request.params.category)
       .catch((err) => {
         throw new Error("server", { cause: err });
       });
     if (!result.length) {
-      throw new Error("No result");
+      throw new Error("NoResult");
     }
     response.status(200).json(result);
   } catch (error) {
@@ -200,11 +206,15 @@ router.post("/newbyemail", async (request, response) => {
 //GET INFO BY POST
 router.post("/all/owner/email", async (request, response) => {
   try {
-    const ownerEmail = request.body.email;
-    if (!ownerEmail) {
+    const email = request.body.email;
+    if (!email) {
       throw new Error("undefined");
     }
-    const result = await product.getAllProductsByOwnerEmail(ownerEmail);
+    const result = await product
+      .getAllProductsByOwnerEmail(email)
+      .catch((err) => {
+        throw new Error("server", { cause: err });
+      });
     response.status(200).json(result);
   } catch (error) {
     const handledError = errorHandler.handleProductError(error);
@@ -320,7 +330,9 @@ router.post("/sale", async (request, response) => {
         throw new Error("server", { cause: err });
       }
     );
-    await product.deleteProductById(tradedProduct.id);
+    await product.deleteProductById(tradedProduct.id).catch((err) => {
+      throw new Error("server", { cause: err });
+    });
     response.status(200).json({
       salecompleted: true,
       MailSentToBuyer: mailToBuyer,

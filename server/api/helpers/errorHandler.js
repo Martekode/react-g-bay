@@ -1,5 +1,4 @@
-const e = require("express");
-const product = require("../models/Product");
+const validator = require("../helpers/validator");
 
 class ErrorHandler {
   handleProductError(error) {
@@ -7,7 +6,7 @@ class ErrorHandler {
       case "NaN": {
         return this.createConsumerError("NaN - Expected A Number!", error);
       }
-      case "No result": {
+      case "NoResult": {
         return this.createConsumerError(
           "No Results from database, Please try searching by ID to ensure results!",
           error
@@ -38,7 +37,7 @@ class ErrorHandler {
         );
       }
       case "BadCategory": {
-        const allowedCategories = product.getAllowedCategories();
+        const allowedCategories = validator.getValidCategories();
         return this.createConsumerError(
           `Currently only predefined categories are allowed: ${allowedCategories}`,
           error
