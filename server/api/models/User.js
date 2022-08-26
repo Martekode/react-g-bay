@@ -25,11 +25,11 @@ class User {
   }
   async getUserByName(name) {
     const query =
-      "SELECT id,name,email,image_url FROM user_table WHERE name = ?;";
+      "SELECT id,name,email,image_url FROM user_table WHERE name LIKE ?;";
     return this.pool.query(query, name);
   }
   async getUserIdByEmail(email) {
-    const query = "SELECT id FROM user_table WHERE email = ?";
+    const query = "SELECT id FROM user_table WHERE email LIKE ?";
     return this.pool.query(query, email);
   }
   async getUserEmailById(id) {
@@ -73,7 +73,7 @@ Here we define all Post methods
 
   //UPDATE BY EMAIL
   async updateUserByMailName(email, newname) {
-    const query = "UPDATE user_table SET name = ? WHERE email = ?";
+    const query = "UPDATE user_table SET name = ? WHERE email LIKE ?";
     return this.pool.query(query, [newname, email]);
   }
   async updateImage(id, newImageUrl) {
