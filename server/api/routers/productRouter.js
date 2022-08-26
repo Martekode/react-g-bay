@@ -285,7 +285,7 @@ router.post("/sale", async (request, response) => {
         throw new Error("server", { cause: err });
       }
     );
-    product.deleteProductById(tradedProduct.id);
+    await product.deleteProductById(tradedProduct.id);
     response.status(200).json({
       salecompleted: true,
       MailSentToBuyer: mailToBuyer,
