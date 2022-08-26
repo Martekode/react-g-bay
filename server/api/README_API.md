@@ -202,6 +202,21 @@ This endpoint accepts an email and returns all the products for the user associa
     }
 ]
 ```
+### UPDATE
+#### UPDATE PRODUCT IMAGE BY PRODUCT ID
+At this endpoint you can change the image url for a product. this endpoint will return an error instead of setting the fallback if the image is not a valid image.
+```js
+/api/product/update/byid/image
+```
+- Example of expected body:
+```json
+{
+    "productid":5,
+    "image_url":"https://c.tenor.com/w-PCA2wkMQEAAAAM/mind-blown-shocked.gif"
+}
+```
+This endpoint will return the updated product back to you in the response!
+
 ### DELETE
 Deleting a product from the database
 #### Delete a product by ID
@@ -212,7 +227,6 @@ Currently the API only supports deleting products by ID.
 ```
 On success the API will return the deleted product to you in JSON format. The product will no longer be available in the database. This action can not be reversed.
 
-~~On success this endpoint will respond with a JSON stringified version of the deleted object. You can use JSON.parse(string) on the string to restructure the JSON object on receival. This product is permanently deleted from the database and can not be restored!~~
 ***
 ## USERS
 ### GET

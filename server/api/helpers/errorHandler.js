@@ -1,4 +1,4 @@
-const product = require("../models/Product");
+const validator = require("../helpers/validator");
 
 class ErrorHandler {
   handleProductError(error) {
@@ -6,7 +6,7 @@ class ErrorHandler {
       case "NaN": {
         return this.createConsumerError("NaN - Expected A Number!", error);
       }
-      case "No result": {
+      case "NoResult": {
         return this.createConsumerError(
           "No Results from database, Please try searching by ID to ensure results!",
           error
@@ -24,6 +24,12 @@ class ErrorHandler {
           error
         );
       }
+      case "BadImage": {
+        return this.createConsumerError(
+          "That image is not Valid! It is either not online, or not an image",
+          error
+        );
+      }
       case "NoDelete": {
         return this.createConsumerError(
           "No Product was deleted from the database.",
@@ -31,7 +37,7 @@ class ErrorHandler {
         );
       }
       case "BadCategory": {
-        const allowedCategories = product.getAllowedCategories();
+        const allowedCategories = validator.getValidCategories();
         return this.createConsumerError(
           `Currently only predefined categories are allowed: ${allowedCategories}`,
           error
@@ -56,7 +62,7 @@ class ErrorHandler {
         );
       }
       default:
-        return this.createServerError(error, "Undefined Error");
+        return this.createServerError("Undefined Error", error);
     }
   }
   handleUserError(error) {

@@ -59,7 +59,7 @@ router.get("/name/:name", async (request, response) => {
                 throw new Error("server", {cause: err});
             });
         if (!result.length) {
-            throw new Error("BadId");
+            throw new Error("NoResult");
         }
         response.status(200).json(result[0]);
     } catch (error) {
@@ -70,13 +70,20 @@ router.get("/name/:name", async (request, response) => {
 //GET PRODUCT BY CATEGORY
 router.get("/category/:category", async (request, response) => {
         try {
+            if (!request.params.category) {
+                throw new Error("undefined");
+            }
+            const isCategoryValid = validator.validateCategory(request.params.category);
+            if (!isCategoryValid) {
+                throw new Error("BadCategory");
+            }
             const result = await product
                 .getProductsByCategory(request.params.category)
                 .catch((err) => {
                     throw new Error("server", {cause: err});
                 });
             if (!result.length) {
-                throw new Error("No result");
+                throw new Error("NoResult");
             }
             response.status(200).json(result);
         } catch (error) {
@@ -229,15 +236,53 @@ router.post("/newbyemail", async (request, response) => {
 //GET INFO BY POST
 router.post("/all/owner/email", async (request, response) => {
     try {
-        const ownerEmail = request.body.email;
-        if (!ownerEmail) {
+        const email = request.body.email;
+        if (!email) {
             throw new Error("undefined");
         }
-        const result = await product.getAllProductsByOwnerEmail(ownerEmail);
+        const result = await product
+            .getAllProductsByOwnerEmail(email)
+            .catch((err) => {
+                throw new Error("server", {cause: err});
+            });
         response.status(200).json(result);
     } catch (error) {
         const handledError = errorHandler.handleProductError(error);
         response.status(handledError.status).json(handledError.message);
+    }
+});
+//UPDATE PRODUCT IMAGE BY ID
+router.post("/update/byid/image", async (req, res) => {
+    try {
+        const {productid, image_url} = req.body;
+        if (!(productid, image_url)) {
+            throw new Error("undefined");
+        }
+        const isImageValid = await validator
+            .validateImageUrl(image_url)
+            .catch((err) => {
+                throw new Error("server", {cause: err});
+            });
+        if (!isImageValid) {
+            throw new Error("BadImage");
+        }
+        const result = await product
+            .updateImage(productid, image_url)
+            .catch((err) => {
+                throw new Error("server", {cause: err});
+            });
+        const updatedProduct = await product
+            .getProductById(productid)
+            .catch((err) => {
+                throw new Error("server", {cause: err});
+            });
+        if (!result.affectedRows) {
+            throw new Error("BadId");
+        }
+        res.status(200).json(updatedProduct[0]);
+    } catch (err) {
+        const handledError = errorHandler.handleProductError(err);
+        res.status(handledError.status).json(handledError.message);
     }
 });
 /*
@@ -280,7 +325,6 @@ router.post("/sale", async (request, response) => {
         if (!(seller_Id, buyer_Id, product_Id)) {
             throw new Error("undefined");
         }
-
         const sellerFetch = await user.getUserByID(seller_Id).catch((err) => {
             throw new Error("server", {cause: err});
         });
@@ -311,12 +355,14 @@ router.post("/sale", async (request, response) => {
         ).catch((err) => {
             throw new Error("server", {cause: err});
         });
-        const mailToSeller = await sendSoldMail(buyer, seller, tradedProduct).catch(
-            (err) => {
+        const mailToSeller = await sendSoldMail(buyer, seller, tradedProduct
+        ).catch((err) => {
+            throw new Error("server", {cause: err});
+        });
+        await product.deleteProductById(tradedProduct.id)
+            .catch((err) => {
                 throw new Error("server", {cause: err});
-            }
-        );
-        await product.deleteProductById(tradedProduct.id);
+            });
         response.status(200).json({
             salecompleted: true,
             MailSentToBuyer: mailToBuyer,
@@ -329,3 +375,17 @@ router.post("/sale", async (request, response) => {
     }
 });
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+

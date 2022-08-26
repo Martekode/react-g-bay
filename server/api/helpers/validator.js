@@ -30,11 +30,12 @@ class Validator {
         return false;
       }
     } catch (err) {
-      //TODO:: THROW TO SCOPE
       throw new Error("server", { cause: error });
     }
   }
-
+  getValidCategories() {
+    return this.VALID_CATEGORIES;
+  }
   async validateImageUrl(url) {
     try {
       if (!this.checkForImageFile(url)) {
@@ -56,11 +57,7 @@ class Validator {
     try {
       const res = await axios.get(url);
       const status = res.status;
-      if (status == 200) {
-        return true;
-      } else {
-        return false;
-      }
+      return status == 200;
     } catch (err) {
       return false;
     }
