@@ -4,11 +4,12 @@ const express = require("express");
 const router = express.Router();
 //Get model
 const product = require("../models/Product");
+const user = require("../models/User");
 //Get Helpers
 const errorHandler = require("../helpers/errorHandler");
-const user = require("../models/User");
-const {request, response} = require("express");
-
+const validator = require("../helpers/validator");
+const sendBoughtMail = require("../helpers/mailForBuyer");
+const sendSoldMail = require("../helpers/mailForSeller");
 //BASE PATH - DEV INDICATOR
 //We use this to make sure our router works :D
 router.get("/", (_request, response) => {
@@ -24,7 +25,9 @@ router.get("/", (_request, response) => {
 //GET ALL PRODUCTS
 router.get("/all", async (_request, response) => {
     try {
-        const result = await product.getAllProducts();
+        const result = await product.getAllProducts().catch((err) => {
+            throw new Error("server", {cause: err});
+        });
         response.status(200).json(result);
     } catch (error) {
         const handledError = errorHandler.handleProductError(error);
@@ -50,11 +53,15 @@ router.get("/id/:id", async (request, response) => {
 //GET PRODUCT BY NAME
 router.get("/name/:name", async (request, response) => {
     try {
-        const result = await product.getProductsByName(request.params.name);
+        const result = await product
+            .getProductById(request.params.id)
+            .catch((err) => {
+                throw new Error("server", {cause: err});
+            });
         if (!result.length) {
-            throw new Error("No result");
+            throw new Error("BadId");
         }
-        response.status(200).json(result);
+        response.status(200).json(result[0]);
     } catch (error) {
         const handledError = errorHandler.handleProductError(error);
         response.status(handledError.status).json(handledError.message);
@@ -62,21 +69,29 @@ router.get("/name/:name", async (request, response) => {
 });
 //GET PRODUCT BY CATEGORY
 router.get("/category/:category", async (request, response) => {
-    try {
-        const result = await product.getProductsByCategory(request.params.category);
-        if (!result.length) {
-            throw new Error("No result");
+        try {
+            const result = await product
+                .getProductsByCategory(request.params.category)
+                .catch((err) => {
+                    throw new Error("server", {cause: err});
+                });
+            if (!result.length) {
+                throw new Error("No result");
+            }
+            response.status(200).json(result);
+        } catch (error) {
+            const handledError = errorHandler.handleProductError(error);
+            response.status(handledError.status).json(handledError.message);
         }
-        response.status(200).json(result);
-    } catch (error) {
-        const handledError = errorHandler.handleProductError(error);
-        response.status(handledError.status).json(handledError.message);
     }
-});
+)
+;
 //GET ALL CATEGORIES
 router.get("/categories", async (_request, response) => {
     try {
-        const result = await product.getAllCategories();
+        const result = await product.getAllCategories().catch((err) => {
+            throw new Error("server", {cause: err});
+        });
         response.status(200).json(result);
     } catch (error) {
         const handledError = errorHandler.handleProductError(error);
@@ -128,20 +143,98 @@ router.post("/new", async (request, response) => {
         if (!(owner_id && name && price && description && image_url && category)) {
             throw new Error("undefined");
         }
-        const result = await product.addNewProduct(
-            owner_id,
-            name,
-            price,
-            description,
-            image_url,
-            category
-        );
+        let validatedCategory = validator
+            .validateCategory(category)
+            .catch((err) => {
+                throw new Error("server", {cause: err});
+            });
+        if (!validatedCategory) {
+            throw new Error("BadCategory");
+        }
+        const imgUrlIsValid = await validator
+            .validateImageUrl(image_url)
+            .catch((err) => {
+                throw new Error("server", {cause: err});
+            });
+        let validImageUrl = "";
+        if (!imgUrlIsValid) {
+            validImageUrl = validator.getDefaultImage();
+        } else {
+            validImageUrl = image_url;
+        }
+        const result = await product
+            .addNewProduct(
+                owner_id,
+                name,
+                price,
+                description,
+                validImageUrl,
+                validatedCategory
+            )
+            .catch((err) => {
+                throw new Error("server", {cause: err});
+            });
         const RawInsertedProductID = result.insertId.toString();
-        const insertedProduct = await product.getProductById(RawInsertedProductID);
         response.status(200).json({
             AddedProductId: RawInsertedProductID,
-            AddedProduct: insertedProduct[0],
         });
+    } catch (error) {
+        const handledError = errorHandler.handleProductError(error);
+        response.status(handledError.status).json(handledError.message);
+    }
+})
+;
+router.post("/newbyemail", async (request, response) => {
+    try {
+        const {email, name, price, description, image_url, category} =
+            request.body;
+        if (!(email && name && price && description && image_url && category)) {
+            throw new Error("undefined");
+        }
+        const validCategory = validator.validateCategory(category).catch((err) => {
+            throw new Error("server", {cause: err});
+        });
+        if (!validCategory) {
+            throw new Error("BadCategory");
+        }
+        const imgUrlIsValid = await validator
+            .validateImageUrl(image_url)
+            .catch((err) => {
+                throw new Error("server", {cause: err});
+            });
+        let validImageUrl = "";
+        if (!imgUrlIsValid) {
+            validImageUrl = validator.getDefaultImage();
+        } else {
+            validImageUrl = image_url;
+        }
+        const result = await product
+            .addNewProductByOwnerEmail(
+                email,
+                name,
+                price,
+                description,
+                validImageUrl,
+                category
+            )
+            .catch((err) => {
+                throw new Error("server", {cause: err});
+            });
+        response.status(200).json({AddedProductId: result.insertId.toString()});
+    } catch (err) {
+        const e = errorHandler.handleProductError(err);
+        response.status(e.status).json(e.message);
+    }
+});
+//GET INFO BY POST
+router.post("/all/owner/email", async (request, response) => {
+    try {
+        const ownerEmail = request.body.email;
+        if (!ownerEmail) {
+            throw new Error("undefined");
+        }
+        const result = await product.getAllProductsByOwnerEmail(ownerEmail);
+        response.status(200).json(result);
     } catch (error) {
         const handledError = errorHandler.handleProductError(error);
         response.status(handledError.status).json(handledError.message);
@@ -158,82 +251,81 @@ router.post("/new", async (request, response) => {
  `------'  `------'`-----'  `------'   `--'    `------'
  */
 router.delete("/delete/:id", async (request, response) => {
-    //INSERT CODE HERE
     try {
-        const productToDelete = await product.getProductById(request.params.id);
         if (isNaN(request.params.id)) {
             throw new Error("NaN");
         }
-        if (!productToDelete) {
-            throw new Error("BadId");
-        }
-        const result = await product.deleteProductById(request.params.id);
+        const result = await product
+            .deleteProductById(request.params.id)
+            .catch((err) => {
+                throw new Error("server", {cause: err});
+            });
         if (!result.affectedRows) {
             throw new Error("BadId");
         }
         response.status(200).json({
-            "Deleted product:": productToDelete[0],
+            "ProductDeletionSuccess:": true,
         });
     } catch (error) {
         const handledError = errorHandler.handleProductError(error);
         response.status(handledError.status).json(handledError.message);
     }
-});
+})
+;
 
-/*
- _     ____  ____  ____  _____  _____
-/ \ /\/  __\/  _ \/  _ \/__ __\/  __/
-| | |||  \/|| | \|| / \|  / \  |  \
-| \_/||  __/| |_/|| |-||  | |  |  /_
-\____/\_/   \____/\_/ \|  \_/  \____\
-
-*/
-router.put("/update/name/:name", async (request, response) => {
+//SALE
+router.post("/sale", async (request, response) => {
     try {
-        const { productID, newName } = request.body;
-        if(!(productID && newName)) {
+        const {seller_Id, buyer_Id, product_Id} = request.body;
+        if (!(seller_Id, buyer_Id, product_Id)) {
             throw new Error("undefined");
         }
-        const checkValidId = await product.getProductById(productID);
-        if (!checkValidId.length){
-            throw new Error("badId")
+
+        const sellerFetch = await user.getUserByID(seller_Id).catch((err) => {
+            throw new Error("server", {cause: err});
+        });
+        if (!sellerFetch.length) {
+            throw new Error("BadId");
         }
-        const checkForName = await product.getProductsByName(newName);
-        if (checkForName.length) {
-            throw new Error("");
+        const seller = sellerFetch[0];
+        const buyerFetch = await user.getUserByID(buyer_Id).catch((err) => {
+            throw new Error("server", {cause: err});
+        });
+        if (!buyerFetch.length) {
+            throw new Error("BadId");
         }
-        await product.updateProductName(productID, newName);
-        const updateProduct = await product.getProductById(productID);
-        response.status(200).json(updateProduct[0]);
-    } catch (error) {
-        const handleError = errorHandler.handleProductError(error);
-        response.status(handleError.status).json(handleError.message);
+        const buyer = buyerFetch[0];
+        const productFetch = await product
+            .getProductById(product_Id)
+            .catch((err) => {
+                throw new Error("server", {cause: err});
+            });
+        if (!productFetch.length) {
+            throw new Error("BadId");
+        }
+        const tradedProduct = productFetch[0];
+        const mailToBuyer = await sendBoughtMail(
+            buyer,
+            seller,
+            tradedProduct
+        ).catch((err) => {
+            throw new Error("server", {cause: err});
+        });
+        const mailToSeller = await sendSoldMail(buyer, seller, tradedProduct).catch(
+            (err) => {
+                throw new Error("server", {cause: err});
+            }
+        );
+        await product.deleteProductById(tradedProduct.id);
+        response.status(200).json({
+            salecompleted: true,
+            MailSentToBuyer: mailToBuyer,
+            MailSentToSeller: mailToSeller,
+            SoldProduct: tradedProduct,
+        });
+    } catch (err) {
+        const handledError = errorHandler.handleProductError(err);
+        response.status(handledError.status).json(handledError.message);
     }
-    });
-
-
+});
 module.exports = router;
-
-//!!!ADD MODEL TO HANDLE ERROR -> Takes error code -> Returns error message :: Does not interfere with HTTP
-//GET PRODUCT BY CATEGORY
-// router.get("/category/:category", async (request, response) => {
-//   try {
-//     if (!isNaN(request.params.category)) {
-//       throw new Error("Bad Input");
-//     }
-//     const query = "SELECT * FROM product_table WHERE category = ?";
-//     const result = await pool.query(query, [request.params.category]);
-//     response.status(200).json(result);
-//   } catch (error) {
-//     switch (error.message) {
-//       case "Bad Input":
-//         response
-//           .status(400)
-//           .json('Query must be of type: String -"Miss me yet ? x TypeScript"');
-//         break;
-//       default:
-//         response.status(500).send(error);
-//         break;
-//     }
-//   }
-// });

@@ -3,6 +3,9 @@ class Product {
   constructor() {
     this.pool = pool;
   }
+  getAllowedCategories() {
+    return this.allowedCategories;
+  }
   /*
   __  ___  ___
  / _|| __||_ _|
@@ -30,13 +33,14 @@ class Product {
     const query = "SELECT * FROM product_table WHERE category = ?";
     return this.pool.query(query, [category]);
   }
-  async getAllProductsByOwnerId(userid) {
-    const query = "SELECT name FROM product_table WHERE owner_id = ?";
-    return this.pool.query(query, userid);
+  async getAllProductsByOwnerId(id) {
+    const query = "SELECT * FROM product_table WHERE owner_id = ?";
+    return this.pool.query(query, [id]);
   }
-  async getAllProductsByEmail(email) {
-    const query = "SELECT product_table.id, owner_id, product_table.name, price, description, product_table.image_url, category FROM product_table INNER JOIN user_table ON user_table.id = product_table.owner_id WHERE user_table.email = ?";
-    return this.pool.query(query, [email])
+  async getAllProductsByOwnerEmail(email) {
+    const query =
+      "SELECT product_table.id,product_table.owner_id,product_table.name,product_table.price,product_table.description,product_table.image_url,product_table.category FROM product_table LEFT JOIN user_table on product_table.owner_id = user_table.id WHERE email = ?;";
+    return this.pool.query(query, [email]);
   }
 
   /*
@@ -57,6 +61,26 @@ Here we define all Post methods
       imageUrl,
       category,
     ]);
+  }
+  async addNewProductByOwnerEmail(
+    email,
+    name,
+    price,
+    description,
+    imageUrl,
+    category
+  ) {
+    const query =
+      "INSERT INTO product_table(owner_id,name,price,description,image_url,category) VALUES((SELECT id FROM user_table WHERE email = ? ),?,?,?,?,?)";
+    return this.pool
+      .query(query, [email, name, price, description, imageUrl, category])
+      .catch((error) => {
+        if (error.text === `Column 'owner_id' cannot be null`) {
+          throw new Error("BadEmail");
+        } else {
+          throw new Error("server", { cause: error });
+        }
+      });
   }
   /*
  _(`-')    (`-')  _         (`-')  _(`-')      (`-')  _

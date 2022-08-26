@@ -20,13 +20,21 @@ class User {
   }
   async getUserByEmail(email) {
     const query =
-        "SELECT id,name,email,image_url FROM user_table WHERE email = ?";
+      "SELECT id,name,email,image_url FROM user_table WHERE email LIKE ?";
     return this.pool.query(query, email);
   }
   async getUserByName(name) {
     const query =
-        "SELECT id,name,email,image_url FROM user_table WHERE name = ?";
+      "SELECT id,name,email,image_url FROM user_table WHERE name = ?;";
     return this.pool.query(query, name);
+  }
+  async getUserIdByEmail(email) {
+    const query = "SELECT id FROM user_table WHERE email = ?";
+    return this.pool.query(query, email);
+  }
+  async getUserEmailById(id) {
+    const query = "SELECT email FROM user_table WHERE id = ?";
+    return this.pool.query(query, id);
   }
   /*
  ___  _  __  ___
@@ -36,19 +44,15 @@ class User {
 Here we define all Post methods
 */
   async createNewUser(username, email, image_url) {
-    if (image_url === undefined) {
-      image_url = "";
-    }
     const secret = "placeholderpw";
     const query =
         "INSERT INTO user_table (name,password,email,image_url) VALUES(?,?,?,?)";
     //Creating placeholder for password <> Auth done by Auth0 ?
     return this.pool.query(query, [username, secret, email, image_url]);
   }
-  async createNewUserEmailOnly(email) {
+  async createNewUserEmailOnly(email, imageUrl) {
     const name = this.createRandomName();
     const secret = this.createRandomPassword();
-    const imageUrl = "";
     const query =
         "INSERT INTO user_table (name,password,email,image_url) VALUES(?,?,?,?)";
     return this.pool.query(query, [name, secret, email, imageUrl]);
@@ -61,13 +65,29 @@ Here we define all Post methods
 \____/\_/   \____/\_/ \|  \_/  \____\
 
 */
+  //UPDATE BY ID
   async updateUserName(id, newname) {
     const query = "UPDATE user_table SET name = ? WHERE id = ?";
     return this.pool.query(query, [newname, id]);
   }
+
+  //UPDATE BY EMAIL
+  async updateUserByMailName(email, newname) {
+    const query = "UPDATE user_table SET name = ? WHERE email = ?";
+    return this.pool.query(query, [newname, email]);
+  }
+  async updateImage(id, newImageUrl) {
+    const query = `UPDATE user_table SET image_url = ? WHERE id = ? `;
+    return this.pool.query(query, [newImageUrl, id, id]);
+  }
+  async updateImageByMail(email, newImageUrl) {
+    const query = "UPDATE user_table SET image_url = ? WHERE email LIKE ?";
+    return this.pool.query(query, [newImageUrl, email]);
+  }
+
   //HELPERS
   createRandomName() {
-    let result = "";
+    let result = "guest_";
     const nameLength = 8;
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     for (let i = 0; i < nameLength; i++) {
