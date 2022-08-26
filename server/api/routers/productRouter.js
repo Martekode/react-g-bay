@@ -26,7 +26,7 @@ router.get("/", (_request, response) => {
 router.get("/all", async (_request, response) => {
   try {
     const result = await product.getAllProducts().catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     response.status(200).json(result);
   } catch (error) {
@@ -43,7 +43,7 @@ router.get("/id/:id", async (request, response) => {
     const result = await product
       .getProductById(request.params.id)
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     if (!result.length) {
       throw new Error("BadId");
@@ -60,7 +60,7 @@ router.get("/name/:name", async (request, response) => {
     const result = await product
       .getProductsByName(request.params.name)
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     if (!result.length) {
       throw new Error("No result");
@@ -77,7 +77,7 @@ router.get("/category/:category", async (request, response) => {
     const result = await product
       .getProductsByCategory(request.params.category)
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     if (!result.length) {
       throw new Error("No result");
@@ -92,7 +92,7 @@ router.get("/category/:category", async (request, response) => {
 router.get("/categories", async (_request, response) => {
   try {
     const result = await product.getAllCategories().catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     response.status(200).json(result);
   } catch (error) {
@@ -117,7 +117,7 @@ router.post("/new", async (request, response) => {
     let validatedCategory = validator
       .validateCategory(category)
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     if (!validatedCategory) {
       throw new Error("BadCategory");
@@ -125,7 +125,7 @@ router.post("/new", async (request, response) => {
     const imgUrlIsValid = await validator
       .validateImageUrl(image_url)
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     let validImageUrl = "";
     if (!imgUrlIsValid) {
@@ -143,7 +143,7 @@ router.post("/new", async (request, response) => {
         validatedCategory
       )
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     const RawInsertedProductID = result.insertId.toString();
     response.status(200).json({
@@ -162,7 +162,7 @@ router.post("/newbyemail", async (request, response) => {
       throw new Error("undefined");
     }
     const validCategory = validator.validateCategory(category).catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     if (!validCategory) {
       throw new Error("BadCategory");
@@ -170,7 +170,7 @@ router.post("/newbyemail", async (request, response) => {
     const imgUrlIsValid = await validator
       .validateImageUrl(image_url)
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     let validImageUrl = "";
     if (!imgUrlIsValid) {
@@ -188,7 +188,7 @@ router.post("/newbyemail", async (request, response) => {
         category
       )
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     response.status(200).json({ AddedProductId: result.insertId.toString() });
   } catch (err) {
@@ -228,7 +228,7 @@ router.delete("/delete/:id", async (request, response) => {
     const result = await product
       .deleteProductById(request.params.id)
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     if (!result.affectedRows) {
       throw new Error("BadId");
@@ -251,14 +251,14 @@ router.post("/sale", async (request, response) => {
     }
 
     const sellerFetch = await user.getUserByID(seller_Id).catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     if (!sellerFetch.length) {
       throw new Error("BadId");
     }
     const seller = sellerFetch[0];
     const buyerFetch = await user.getUserByID(buyer_Id).catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     if (!buyerFetch.length) {
       throw new Error("BadId");
@@ -267,7 +267,7 @@ router.post("/sale", async (request, response) => {
     const productFetch = await product
       .getProductById(product_Id)
       .catch((err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       });
     if (!productFetch.length) {
       throw new Error("BadId");
@@ -278,11 +278,11 @@ router.post("/sale", async (request, response) => {
       seller,
       tradedProduct
     ).catch((err) => {
-      throw new Error("server", { causer: err });
+      throw new Error("server", { cause: err });
     });
     const mailToSeller = await sendSoldMail(buyer, seller, tradedProduct).catch(
       (err) => {
-        throw new Error("server", { causer: err });
+        throw new Error("server", { cause: err });
       }
     );
     product.deleteProductById(tradedProduct.id);
