@@ -11,9 +11,9 @@ function Card () {
     const CheckoutArrayValue = useRecoilValue(checkoutArrayState);
 
     const addItem = (e) => {
+        console.table(JSON.parse(e.currentTarget.value))
         setCheckoutArray((checkoutArrayState) => [...checkoutArrayState,
-            e.target.value ])
-        console.log(CheckoutArrayValue);
+            JSON.parse(e.currentTarget.value) ])
     }
 
     const [products, setProducts] = useState ([]);
@@ -32,10 +32,6 @@ function Card () {
         getCategoryData();
     },[])
 
-    // function addItem (e) {
-    //     setArray(e.target.value)
-    // }
-
 
 
     return (
@@ -51,7 +47,7 @@ function Card () {
                                     Price: {product.price}€
                                 </p>
                                 <p className="text-gray-600 text-2xl mt-10">{product.description}</p>
-                                <button key={index} value={product.id} onClick={addItem} className="border-2 border-solid mt-6 hover:bg-hovers p-2 w-20 h-10 flex justify-center items-center rounded-full" ><GrAdd /></button>
+                                <button key={index} value={JSON.stringify(product)} onClick={addItem} className="border-2 border-solid mt-6 hover:bg-hovers p-2 w-20 h-10 flex justify-center items-center rounded-full" ><GrAdd/></button>
                             </div>
                         </div>
             ))}
