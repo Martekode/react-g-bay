@@ -1,5 +1,4 @@
 import React from 'react';
-import useFetch from './useFetch'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
 import Profile from "./pages/Profile";
@@ -42,14 +41,6 @@ function App() {
         <Footer/>
     </div>
   );
-    const [data, loading] = useFetch('/api');
-
-    if (loading) {
-        return <div>loading...</div>
-    }
-
-    return <h1 className="text-3xl font-bold underline">{data.message}</h1>;
-
 }
 
 export default App;
