@@ -21,6 +21,7 @@ import {
     useRecoilState,
     useRecoilValue,
 } from 'recoil';
+import Comics from "./pages/Comics";
 
 export const checkoutArrayState = atom({
     key: 'checkoutArray',
@@ -76,6 +77,9 @@ function App() {
         </Routes>
         <Routes>
             <Route path="/boardgames" element={<Boardgames />} />
+        </Routes>
+        <Routes>
+            <Route path="/comics" element={<Comics />} />
         </Routes>
         <Footer/>
     </div>
