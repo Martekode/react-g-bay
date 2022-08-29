@@ -8,10 +8,10 @@
     Alles considered, meer practice should do the trick.
 
 # Ian
-
+````
 In my experience we had a strong coding group, although we still all struggled very hard with some concepts.  
 The beginning was pretty rough on us, but so is every beginning, am I right?  
-Once we got started, me as the backend developer in this proect, together with Yasser did a lot of research before we actually did any coding,  
+Once we got started, me as the backend developer in this project, together with Yasser did a lot of research before we actually did any coding,  
 which made things like the DB connection and the actual coding less of a hassle than it could have been in my opinion.  
 The major point we could work on as a team was the ticketing system, we tried, don't get me wrong, but this system only survived the first couple of days.  
 
@@ -19,6 +19,7 @@ All in all I am very grateful for my team and the learning opportunities I had d
 and I think we can be proud on the product we delivered.  
 
 Ian out *Mic Drop*
+````
 # Glenn
 ``` 
 Personally I think that both time and to little base knowledge on all the techniques we had to use are what negatively impacted our project the most.
