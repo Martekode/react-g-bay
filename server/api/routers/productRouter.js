@@ -374,6 +374,31 @@ router.post("/sale", async (request, response) => {
         response.status(handledError.status).json(handledError.message);
     }
 });
+
+router.put("/update/name/:name", async (request, response) => {
+    try {
+        const {productID, newName} = request.body;
+        if (!(productID && newName)) {
+            throw new Error("undefined");
+        }
+        const checkValidId = await product.getProductById(productID);
+        if (!checkValidId.length) {
+            throw new Error("badId")
+        }
+        const checkForName = await product.getProductsByName(newName);
+        if (checkForName.length) {
+            throw new Error("");
+        }
+        await product.updateProductName(productID, newName);
+        const updateProduct = await product.getProductById(productID);
+        response.status(200).json(updateProduct[0]);
+    } catch (error) {
+        const handleError = errorHandler.handleProductError(error);
+        response.status(handleError.status).json(handleError.message);
+    }
+});
+
+
 module.exports = router;
 
 
