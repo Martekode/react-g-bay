@@ -149,7 +149,6 @@ router.post("/new", async (request, response) => {
       throw new Error("undefined");
     }
     let validatedCategory = validator.validateCategory(category);
-
     if (!validatedCategory) {
       throw new Error("BadCategory");
     }
@@ -192,9 +191,7 @@ router.post("/newbyemail", async (request, response) => {
     if (!(email && name && price && description && image_url && category)) {
       throw new Error("undefined");
     }
-    const validCategory = validator.validateCategory(category).catch((err) => {
-      throw new Error("server", { cause: err });
-    });
+    const validCategory = validator.validateCategory(category);
     if (!validCategory) {
       throw new Error("BadCategory");
     }
