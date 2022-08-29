@@ -4,10 +4,10 @@ class Product {
     this.pool = pool;
   }
   /*
-  __  ___  ___ 
+  __  ___  ___
  / _|| __||_ _|
-( |_n| _|  | | 
- \__/|___| |_|   
+( |_n| _|  | |
+ \__/|___| |_|
  Here we define all getters
 */
   async getAllProducts() {
@@ -41,15 +41,15 @@ class Product {
   }
 
   /*
- ___  _  __  ___ 
+ ___  _  __  ___
 | o \/ \/ _||_ _|
-|  _( o )_ \ | | 
-|_|  \_/|__/ |_|              
+|  _( o )_ \ | |
+|_|  \_/|__/ |_|
 Here we define all Post methods
 */
   async addNewProduct(ownerId, name, price, description, imageUrl, category) {
     const query =
-      "INSERT INTO product_table (owner_id,name,price,description,image_url,category) VALUES(?,?,?,?,?,?)";
+        "INSERT INTO product_table (owner_id,name,price,description,image_url,category) VALUES(?,?,?,?,?,?)";
     return this.pool.query(query, [
       ownerId,
       name,
@@ -80,6 +80,15 @@ Here we define all Post methods
       });
   }
   /*
+<<<<<<< HEAD
+ _(`-')    (`-')  _         (`-')  _(`-')      (`-')  _
+( (OO ).-> ( OO).-/  <-.    ( OO).-/( OO).->   ( OO).-/
+ \    .'_ (,------.,--. )  (,------./    '._  (,------.
+ '`'-..__) |  .---'|  (`-') |  .---'|'--...__) |  .---'
+ |  |  ' |(|  '--. |  |OO )(|  '--. `--.  .--'(|  '--.
+ |  |  / : |  .--'(|  '__ | |  .--'    |  |    |  .--'
+ |  '-'  / |  `---.|     |' |  `---.   |  |    |  `---.
+=======
  _     ____  ____  ____  _____  _____
 / \ /\/  __\/  _ \/  _ \/__ __\/  __/
 | | |||  \/|| | \|| / \|  / \  |  \  
@@ -100,11 +109,40 @@ Here we define all Post methods
  |  |  ' |(|  '--. |  |OO )(|  '--. `--.  .--'(|  '--.  
  |  |  / : |  .--'(|  '__ | |  .--'    |  |    |  .--'  
  |  '-'  / |  `---.|     |' |  `---.   |  |    |  `---. 
+>>>>>>> main
  `------'  `------'`-----'  `------'   `--'    `------'
  */
   async deleteProductById(id) {
     const query = "DELETE FROM product_table WHERE id = ?";
     return this.pool.query(query, [id]);
+  }
+  /*
+_     ____  ____  ____  _____  _____
+/ \ /\/  __\/  _ \/  _ \/__ __\/  __/
+| | |||  \/|| | \|| / \|  / \  |  \
+| \_/||  __/| |_/|| |-||  | |  |  /_
+\____/\_/   \____/\_/ \|  \_/  \____\
+
+*/
+  async updateProductName(id, newName) {
+    const query = "UPDATE product_table SET name = ? WHERE id = ?";
+    return this.pool.query(query, [newName, id]);
+  }
+  async updateProductPrice(id, newPrice) {
+    const query = "UPDATE product_table SET price = ? WHERE id = ?";
+    return this.pool.query(query, [newPrice, id]);
+  }
+  async updateProductDescription(id, newDescription) {
+    const query = "UPDATE product_table SET description = ? WHERE id = ?";
+    return this.pool.query(query, [newDescription, id]);
+  }
+  async updateProductImageUrl(id, newImageUrl) {
+    const query = "UPDATE product_table SET image_url = ? WHERE id = ?";
+    return this.pool.query(query, [newImageUrl, id]);
+  }
+  async updateProductCategory(id, newCategory) {
+    const query = "UPDATE product_table SET category = ? WHERE id = ?";
+    return this.pool.query(query, [newCategory, id]);
   }
 }
 const product = new Product();

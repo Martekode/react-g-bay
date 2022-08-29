@@ -13,28 +13,28 @@ const pool = mariadb.createPool({
 
 //Check for errors
 pool.getConnection((error, connection) => {
-  if (error) {
-    switch (error.code) {
-      case "PROTOCOL_CONNECTION_LOST":
-        console.error("DB CONNECTION LOST!");
-        break;
-      case "ER_CON_COUNT_ERROR":
-        console.error("DB RECEIVED TOO MANY CONNECTIONS");
-        break;
-      case "ECONNREFUSED":
-        console.error("DB HAS REFUSED CONNECTION");
-        break;
-      case "ER_GET_CONNECTION_TIMEOUT":
-        console.error("NO CONNECTION TO DATABASE");
-        console.error("MAKE SURE YOU HAVE A REACHABLE MARIADB DATABASE");
-        console.error(
-          "CHECK YOUR .ENV FILE AND TEST YOUR CONNECTION WITH GIVEN CREDENTIALS"
-        );
-        break;
+    if (error) {
+        switch (error.code) {
+            case "PROTOCOL_CONNECTION_LOST":
+                console.error("DB CONNECTION LOST!");
+                break;
+            case "ER_CON_COUNT_ERROR":
+                console.error("DB RECEIVED TOO MANY CONNECTIONS");
+                break;
+            case "ECONNREFUSED":
+                console.error("DB HAS REFUSED CONNECTION");
+                break;
+            case "ER_GET_CONNECTION_TIMEOUT":
+                console.error("NO CONNECTION TO DATABASE");
+                console.error("MAKE SURE YOU HAVE A REACHABLE MARIADB DATABASE");
+                console.error(
+                    "CHECK YOUR .ENV FILE AND TEST YOUR CONNECTION WITH GIVEN CREDENTIALS"
+                );
+                break;
+        }
     }
-  }
-  if (connection) {
-    connection.release();
-  }
+    if (connection) {
+        connection.release();
+    }
 });
 module.exports = pool;

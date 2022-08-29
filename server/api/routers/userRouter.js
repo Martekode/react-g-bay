@@ -8,10 +8,10 @@ router.get("/", (_request, response) => {
   response.send("Hello From /user");
 });
 /*
-  __  ___  ___ 
+  __  ___  ___
  / _|| __||_ _|
-( |_n| _|  | | 
- \__/|___| |_|   
+( |_n| _|  | |
+ \__/|___| |_|
  Here we define all getters
 */
 router.get("/id/:id", async (request, response) => {
@@ -109,11 +109,12 @@ router.get("/email/check/:email", async (request, response) => {
     response.status(handledError.status).json(handledError.message);
   }
 });
+router.get("/")
 /*
- ___  _  __  ___ 
+ ___  _  __  ___
 | o \/ \/ _||_ _|
-|  _( o )_ \ | | 
-|_|  \_/|__/ |_|              
+|  _( o )_ \ | |
+|_|  \_/|__/ |_|
 Here we define all Post methods
 */
 router.post("/new", async (request, response) => {
@@ -215,10 +216,10 @@ router.post("/check/email", async (req, res) => {
 /*
  _     ____  ____  ____  _____  _____
 / \ /\/  __\/  _ \/  _ \/__ __\/  __/
-| | |||  \/|| | \|| / \|  / \  |  \  
-| \_/||  __/| |_/|| |-||  | |  |  /_ 
+| | |||  \/|| | \|| / \|  / \  |  \
+| \_/||  __/| |_/|| |-||  | |  |  /_
 \____/\_/   \____/\_/ \|  \_/  \____\
-                                     
+
 */
 //UPDATE BY ID
 router.put("/update/byid/name", async (request, response) => {

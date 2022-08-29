@@ -26,11 +26,11 @@ DB_NAME=databasename
 This section contains general information about the API
 - RESPONSES:
     - All responses will have a JSON formatted body
-    - Unhandled get requests not caught by our errohandler will route you to the homepage of the app
+    - Unhandled get requests not caught by our errorHandler will route you to the homepage of the app
 - ERRORS:
     - If any error occurs. The api will return an errormessage. The first value of this error message will always be a boolean called _error_ set to true!
         - ERROR:400 Bad Request
-            - When enountering this error somethign went wrong in the request, usually more info will be provided in the response.
+            - When encountering this error something went wrong in the request, usually more info will be provided in the response.
             - If you would like another endpoint to suite your request's needs please feel free to contact us!
         - ERROR:500 Internal Server Error
             - There is an error on our end. We are sorry. please provide us with the error message sent in the response!
@@ -86,6 +86,14 @@ Returns all categories currently available in the product database
 ```js
 /api/product/categories
 ```
+#### Get All Products By Owner Id
+````js
+/api/product/owner/id/:id
+````
+#### Get All Products By Email
+````js
+api/product/all/owner/email/:email
+````
 ### POST
 #### Add a product with Owner-ID
 Adding a new product can be done trough a POST request on the following endpoint
@@ -161,7 +169,6 @@ This endpoint accepts an email and returns all the products for the user associa
 ```js
 /api/product/all/owner/email
 ```
-
 - This endpoint expects you to provide an email
 - If the email is not found in the database you will not be provided an error since this is not possible without overloading the database. It will return an empty array tough
     - If you want to check if an email exists you can use one of the User endpoints

@@ -25,5 +25,5 @@ app.use(express.static(path.join(__dirname, "../client/build")));
 // });
 //Make App listen
 app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
+    console.log(`Server listening on ${PORT}`);
 });
