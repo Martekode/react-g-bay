@@ -21,11 +21,11 @@ const Navbar = () => {
                 />
             </Link>
 
-                <div className="flex justify-center items-center">
-                    <input className="bg-background focus:outline-none border border-secondary form-control mx-0 rounded w-60" type="search" placeholder="Search"
-                            aria-label="Search"/>
-                    <BsSearch className="mt-1 ml-2"/>
-                </div>
+                {/*<div className="flex justify-center items-center">*/}
+                {/*    <input className="bg-background focus:outline-none border border-secondary form-control mx-0 rounded w-60" type="search" placeholder="Search"*/}
+                {/*            aria-label="Search"/>*/}
+                {/*    <BsSearch className="mt-1 ml-2"/>*/}
+                {/*</div>*/}
                 <ul className='flex'>
                     <li className='flex flex-row'>
                     {error && <p>Authentication Error</p>}
