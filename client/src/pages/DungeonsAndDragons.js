@@ -1,7 +1,18 @@
 import React, {useState, useEffect} from "react";
 import {GrAdd} from "react-icons/gr";
+import {useRecoilValue, useSetRecoilState} from "recoil";
+import {checkoutArrayState} from "../App";
 
 function Dungeons () {
+
+    const setCheckoutArray = useSetRecoilState(checkoutArrayState);
+    const CheckoutArrayValue = useRecoilValue(checkoutArrayState);
+
+    const addItem = (e) => {
+        console.table(JSON.parse(e.currentTarget.value))
+        setCheckoutArray((checkoutArrayState) => [...checkoutArrayState,
+            JSON.parse(e.currentTarget.value) ])
+    }
 
     const [products, setProducts] = useState ([]);
     const [test, setTest] = useState([]);
@@ -31,7 +42,7 @@ function Dungeons () {
                             Price: {product.price}€
                         </p>
                         <p className="text-gray-600 text-2xl mt-10">{product.description}</p>
-                        <button className="border-2 border-solid mt-6 hover:bg-hovers p-2 w-20 h-10 flex justify-center items-center rounded-full" ><GrAdd /></button>
+                        <button key={index} value={JSON.stringify(product)} onClick={addItem} className="border-2 border-solid mt-6 hover:bg-hovers p-2 w-20 h-10 flex justify-center items-center rounded-full" ><GrAdd /></button>
                     </div>
                 </div>
             ))}
