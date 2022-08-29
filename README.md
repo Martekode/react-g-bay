@@ -23,3 +23,61 @@ so the combination of time, not enough resources (as in people, due to illness) 
 # Michael
 
 # Yasser
+```javascript
+function giveFeedback(post-mortem){
+    (post-mortem.writer!=='Yasser'){
+        throw new Error('This is not the author you are looking for!')
+    };
+    try{
+    const TechStack = {
+        frontend:'ReactJS',
+        backend:'expressJS',
+        server:'nodeJS',
+        database:'MariaDB',
+        positiveFeedback:'We got to explore a really popular stack in the industry!',
+        negativeFeedback:'We complicated things by using bad sources as documentation, and probably taught ourselves a couple of bad practices'
+    }
+    const TeamWork = {
+        Team:[
+            Roles:{
+                Scrum_Master:{
+                    'Brian'
+                }
+                Frontend:{
+                    'Glenn',
+                    'Michael',
+                    'Brian'
+                }
+                Backend:{
+                    'Ian',
+                    'Yasser'
+                }
+            }
+        ],
+        mood:'Good',
+        positiveFeedback:'I think our team is very ambitious and is not afraid of the challenge of trying something totally new to solve the problem at hand',
+        negativeFeedback:'I felt like the communication was either not there or (project related) of no productional value'
+    }
+    const Exercise = {
+        initialTought:'Wauw, this will be amazing! I can not wait to create a real full-stack app!',
+        firstWeek:'This is going nowhere :( This projects scope is just way too over our head',
+        secondWeek:'Héhé this restFull API thingy is my 8*tch! and my backend colleague is also getting the hang of it! Nice',
+        summary:{
+            projectFlow:'I think just saying what MVP stands for does not ring a bell. I know that it took a long time before anyone tried to actually fetch anything in our group(probably due to the learning curve of ReactJS). I think if the development flow was clearer it would be very beneficial to the endproduct of these exercises',
+            technical:'I think for most people it would be beneficial if they had already made a tiny api themselves with a seperate frontend that consumes it. And make it clear that if you are not at home in a techstack it might be beneficial to use something productive. Until enough (in this case spare) time is spent with the choosen technology',
+            coaches:'Thank you guys for supporting us trough this exercise, and just being there. A lot of googling and receiving bad advice or weird ways of the mind became clear. I might not have done it 100% right. But I did understand everything I did instead of npm installing and copy pasting. This was thanks to you!'
+        }
+    }
+    }catch(err){
+        console.log(`Something went wrong!`);
+        console.log(`But don't worry. That's your life now!`);
+        console.log(`Just google for some more NPM packages with 30 weekly downloads to install`);
+        console.warn(`Meanwhile: Spend some time reading this:`);
+        console.error(err)
+        console.table(err);
+        console.log(`Altough we all know you are going to put a log after every step of the program untill you see where it stops logging it.`)
+        console.error('The solution to all your development problems in one quote:')
+        console.warn('Fix the problem, not the symptons!-- Steve Maguire')
+    }
+}
+```
