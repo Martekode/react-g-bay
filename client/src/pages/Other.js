@@ -32,7 +32,7 @@ function Other () {
     return (
         <div className="grid grid-cols-3">
             {products.map((product, index) => (
-                <div className="border flex flex-col md:flex-row md:max-w-xl rounded-lg bg-CoverCard shadow-lg scale-75" key={index}>
+                <div className="border flex flex-col md:flex-row md:max-w-xl rounded-lg bg-backgroundTwo shadow-lg scale-75" key={index}>
                     <img
                         className="w-80 h-80 md:h-auto object-cover md:w-48 rounded-t-lg md:rounded-none md:rounded-l-lg"
                         src={product.image_url} alt=""/>
