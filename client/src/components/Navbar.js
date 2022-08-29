@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {Link} from "react-router-dom";
 import {CgProfile} from "react-icons/cg";
 import {BsSearch} from "react-icons/bs"
@@ -8,6 +8,7 @@ import logo from "../images/blacklogo.png"
 import { useAuth0 } from '@auth0/auth0-react';
 import LoginButton from './LoginButton';
 import LogoutButton from './LogoutButton';
+
 //We can use a logo to import to go to the HomePage and for the Profile and Checkout
 const Navbar = () => {
     const {isLoading,error} = useAuth0();
@@ -19,9 +20,10 @@ const Navbar = () => {
                     alt="logo"
                 />
             </Link>
-                <div className="flex justify-between">
-                    <input className="bg-primary focus:outline-none border border-secondary form-control mx-0 rounded w-60" type="search" placeholder="Search"
-                        aria-label="Search"/>
+
+                <div className="flex justify-center items-center">
+                    <input className="bg-background focus:outline-none border border-secondary form-control mx-0 rounded w-60" type="search" placeholder="Search"
+                            aria-label="Search"/>
                     <BsSearch className="mt-1 ml-2"/>
                 </div>
                 <ul className='flex'>

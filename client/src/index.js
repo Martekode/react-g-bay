@@ -5,6 +5,13 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 import {Auth0Provider} from '@auth0/auth0-react';
+import {
+    RecoilRoot,
+    atom,
+    selector,
+    useRecoilState,
+    useRecoilValue,
+} from 'recoil';
 
 const domain = 'dev-s70w4f16.us.auth0.com';
 console.log(domain);
@@ -18,7 +25,9 @@ root.render(
         redirectUri={window.location.origin}
     >
         <BrowserRouter>
-            <App />
+            <RecoilRoot>
+                <App />
+            </RecoilRoot>
         </BrowserRouter>
     </Auth0Provider>
 );
