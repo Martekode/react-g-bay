@@ -16,6 +16,8 @@ const productRouter = require("./api/routers/productRouter");
 //ROUTERS
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
+app.use(express.static(path.join(__dirname, "../client/build")));
+
 
 // Any uncaught returns index.html - Breaks build
 // app.get("/*", (request, response) => {
