@@ -20,7 +20,7 @@ export default function AuthenticatedProfile() {
                             <div className='p-6'>{user?.nickname}</div>
                             <div className='p-6'>{user?.email}</div>
                             <Link to="/sell">
-                                <div className='p-6 hover:text-hovers'>Sell products</div>
+                                <button className='hover:bg-secondary border-2 rounded-full w-32 hover:text-primary'>Sell products</button>
                             </Link>
                         </div>
                     </div>
