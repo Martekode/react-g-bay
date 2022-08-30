@@ -32,7 +32,13 @@ Some prior project combining some of the new implementations we had to use for t
 so the combination of time, not enough resources (as in people, due to illness) and not enough experience/knowledge on the things we had to use/do.
 ```
 # Michael
-
+``` 
+I think before this assignment we had no idea how all of this worked, meaning back-end connected to the front-end with a scrum-master in the lead. 
+We had a very strong coding group in my oppinion, the first two days we had to figure alot of things out, but we managed to do this together as a group.
+After that, the ball started rolling... We managed to Fetch and Post things for the first time from our own back-end!
+For myself, I've learned alot! (Routing and Navigating in React, Making Fetches/Post to the databases, Learned about Auth0, Tailwind CSS, and from my fellow students)
+So overall, I think we managed to do a great job on the assignment and we did what the client asked for and the client was happy with the results!
+```
 # Yasser
 ```javascript
 function giveFeedback(post-mortem){
